@@ -156,7 +156,7 @@
                   @click="PageDetail(scope.row.id)">详情
                 </span>
                 <span
-                  @click="PageDetail(scope.row.id)">详情
+                  @click="PageDetails(scope.row.id)">详情
                 </span>
               </template>
             </el-table-column>
