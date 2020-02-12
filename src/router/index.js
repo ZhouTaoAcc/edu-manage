@@ -15,28 +15,32 @@ export default new Router({
       name: '后台管理系统',
       icon:'el-icon-document',
       component: Home,
+      meta: { requiresAuth: true },
       children:[
         {
           path:'cms/page/list',
           name:'页面列表',
           component: pageList,
-          hidden:false
+          hidden:false,
+          meta: { title: '页面列表' }
         },
         {
           path:'cms/page/list2',
-          name:'页面列表',
+          name:'页面列表2',
           component: pageList,
-          hidden:false
+          hidden:false,
+          meta: { title: '页面列表2' }
         },
         {
           path:'cms/page/list3',
-          name:'页面列表',
+          name:'页面列表3',
           component: pageList,
-          hidden:false
+          hidden:false,
+          meta: { title: '页面列表3' }
         },
         {
           path:'cms/page/list4',
-          name:'页面列表',
+          name:'页面列表4',
           component: pageList,
           hidden:false
         },

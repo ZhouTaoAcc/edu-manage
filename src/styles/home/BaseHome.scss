@@ -2,7 +2,7 @@
 .BaseHome {
   width: 100%;
   background: #EEEEEE;
-  padding: 0.4rem;
+  padding: 0rem;
   box-sizing: border-box;
   position: absolute;
   top: 0px;
@@ -50,17 +50,15 @@
       width: 240px;
       min-height: auto;
     }
-    .breadcrumb-container {
-      margin-bottom: 10px;
-    }
     /*下面设置内容区域（右中）最外层样式*/
     .el-main {
       background: rgb(240, 242, 245);
-      max-height:596px; //目的是只有内容区域达到滚动效果 其他边栏固定不动
+      max-height:600px; //目的是只有内容区域达到滚动效果 其他边栏固定不动
+      padding: 0 20px 10px 20px;
     }
     /*下面设置尾部区域（下）最外层样式*/
     .el-footer {
-      background: #EEEEEE;
+      background: rgb(240, 242, 245);
     }
   }
 }

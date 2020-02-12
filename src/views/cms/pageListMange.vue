@@ -1,5 +1,16 @@
 <template>
   <div class="edu-pageList-contain">
+    <!--面包屑行-->
+    <div class="breadcrumb-operation">
+      <el-breadcrumb separator="/" class="breadcrumb-inner">
+        <el-breadcrumb-item v-for="(item)  in levelList" :key="item.path" v-if="item.meta.title">
+          <router-link :to="item.redirect||item.path">{{item.meta.title}}</router-link>
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+      <span class="operation">
+         <span class="el-icon-circle-plus" @click="addPageBtn"> 添加页面</span>
+      </span>
+    </div>
     <!--查询部分-->
     <div class="edu-pageList-top">
       <el-form
@@ -26,13 +37,14 @@
             prop="siteId"
           > 
             <el-select v-model="searchPageParams.siteId" placeholder="请选择站点"
-            clearable>   
+                       clearable>   
               <el-option
-               v-for="item in siteList"
-               :key="item.siteId"
-               :label="item.siteName"
-               :value="item.siteId">    
-              </el-option>  
+                v-for="item in siteList"
+                :key="item.siteId"
+                :label="item.siteName"
+                :value="item.siteId">    
+              </el-option>
+                
             </el-select>
           </el-form-item>
           <el-form-item
@@ -72,7 +84,7 @@
             class="edu-pageList-fiu">
             <div class="btn-click">
               <el-button type="primary" @click="searchBtn">查询</el-button>
-              <el-button @click="resetForm('searchPageParams')">重置</el-button>
+              <el-button @click="resetForm()">重置</el-button>
             </div>
           </el-form-item>
         </div>
@@ -122,6 +134,16 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop="templateId"
+              label="模板ID"
+              min-width="100"
+              :show-overflow-tooltip="true"
+            >
+              <template slot-scope="scope">
+                {{scope.row.templateId||'--'}}
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="pageWebPath"
               label="访问路径"
               min-width="100"
@@ -149,15 +171,11 @@
             </el-table-column>
             <el-table-column
               label="操作"
-              width="80"
+              width="100"
               fixed="right">
               <template slot-scope="scope">
-                <span
-                  @click="PageDetail(scope.row.id)">详情
-                </span>
-                <span
-                  @click="PageDetails(scope.row.id)">详情
-                </span>
+                <span class="tab-btn" @click="pageDetail(scope.row.id)">详情</span>
+                <span class="tab-btn" @click="updatePageBtn(scope.row.id)">编辑</span>
               </template>
             </el-table-column>
           </el-table>
@@ -177,16 +195,38 @@
         </div>
       </div>
     </div>
+    <!--自定义组件 用于添加 修改-->
+    <editor-page
+      :flag="flag"
+      :editorFlag.sync="!flag ? addPageFlag: updatePageFlag"
+      @addModel="addSuccess"
+      @closeModel="closeSuccess">
+    </editor-page>
   </div>
 </template>
 
 <script>
   import moment from 'moment';
   import {findPageListApi} from '../../service/cms'
+  import editorPage from './editorPage'
 
   export default {
+    components: {
+      editorPage
+    },
     data() {
       return {
+        flag: false, //false 增加 true修改
+        addPageFlag: {
+          visible: false,
+          title: '添加页面',
+          data: {}
+        },
+        updatePageFlag: {
+          visible: false,
+          title: '编辑页面',
+          data: {}
+        },
         //时间选择器 默认时间
         pickerOptions: {
           disabledDate: (time) => {
@@ -216,8 +256,15 @@
         ],
         copyParmas: {}, //查询使用的参数
         totalCount: null,	//总个数
-        tablePageData: []	//列表中的值
+        tablePageData: [],	//列表中的值
+        levelList: null,
+
       };
+    },
+    watch: {
+      $route(to, from) {
+        this.getBreadcrumb();
+      }
     },
     computed: {
       // 日期选择器默认日期
@@ -230,8 +277,9 @@
             this.searchPageParams.startDate = '';
             this.searchPageParams.endDate = '';
           } else {
-            this.searchPageParams.startDate = val[0];
-            this.searchPageParams.endDate = val[1];
+            //日期选择器时间默认为date类型 转为字符串
+            this.searchPageParams.startDate = moment(val[0]).format('YYYY-MM-DD HH:mm:ss');
+            this.searchPageParams.endDate = moment(val[1]).format('YYYY-MM-DD HH:mm:ss');
           }
         }
       }
@@ -246,15 +294,25 @@
       // }
       this.copyParmas = {...this.searchPageParams};
       this.showListInfo();
+      this.getBreadcrumb();
     },
     filters: {},
     methods: {
       //格式化时间
       timeFormat() {
-        const varstart = moment(new Date()).subtract(6, 'days').format('YYYY-MM-DD 00:00:00');
+        const varstart = moment(new Date()).subtract(365 * 2, 'days').format('YYYY-MM-DD 00:00:00');
         const varend = moment(new Date()).format('YYYY-MM-DD 23:59:59');
-        this.searchPageParams.startDate = new Date(varstart);
-        this.searchPageParams.endDate = new Date(varend);
+        this.searchPageParams.startDate = varstart;
+        this.searchPageParams.endDate = varend;
+      },
+      //生成面包屑
+      getBreadcrumb() {
+        let matched = this.$route.matched.filter(item => item.name);
+        const first = matched[0];
+        if (first && first.name !== '') {
+          matched = [{path: '/', meta: {title: '后台管理系统'}}].concat(matched)
+        }
+        this.levelList = matched;
       },
       //查询分页内容
       showListInfo() {
@@ -293,7 +351,7 @@
       //转换时间格式 row [Number] 行 column [Number] 列 cellValue [String] 对应的值
       formatterTime(row, column, cellValue) {
         if (cellValue != null) {
-          return moment(new Date(cellValue)).format('YYYY-MM-DD HH:mm:ss');
+          return moment(new Date(cellValue)).format('YYYY-MM-DD HH:mm:ss');//自动将UTC转出CST 也就是自动加上8小时
         } else {
           return '--';
         }
@@ -316,18 +374,43 @@
         this.copyParmas.pageNo = 0;
         this.showListInfo();
       },
-      //详情方法 id [String] 记录id
-
+      addPageBtn() {
+        this.flag = false;
+        this.addPageFlag.visible = true;
       },
-      //重置按钮 formName [Object] 表单数据
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-        this.searchPageParams.pageNo = 0;
-        this.searchPageParams.pageSize = 10;
-        this.timeFormat();
-        this.copyParmas = {...this.searchPageParams};
-        this.showListInfo();
+      updatePageBtn(val) {
+        if (val) {
+          this.flag = true;
+          this.updatePageFlag.visible = true;
+          console.log('编辑', val);
+          this.updatePageFlag.data = val; //传值给子组件
+        }
       }
+    },
+    //点确定之后回调
+    addSuccess() {
+
+    },
+    //点关闭之后回调
+    closeSuccess() {
+      this.addPageFlag.visible = false;
+      this.updatePageFlag.visible = false;
+    },
+    //详情方法 id [String] 记录id
+    pageDetail() {
+
+    },
+    //重置按钮 formName [Object] 表单数据
+    resetForm() {
+      for (let k in this.searchPageParams) {
+        this.searchPageParams[k] = '';
+      }
+      this.searchPageParams.pageNo = 0;
+      this.searchPageParams.pageSize = 10;
+      this.timeFormat();
+      this.copyParmas = {...this.searchPageParams};
+      this.showListInfo();
+    }
   };
 </script>
 <style scoped lang="scss">

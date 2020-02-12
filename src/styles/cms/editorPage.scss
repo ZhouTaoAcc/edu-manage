@@ -1,0 +1,35 @@
+/*编辑页面表单样式*/
+
+.editor-box{
+  display: flex;
+  .el-form{
+    /deep/ .item {
+      display: flex;
+      flex-direction: row;
+      /deep/ .el-form-item{
+        width: 400px;
+      }
+      /deep/ .el-form-item__content{
+        width: 250px;
+      }
+      /deep/ .el-select{
+        width: 250px;
+      }
+    }
+    .el-form-item{
+      width: 400px;
+      /deep/ .el-form-item__content{
+        width: 250px;
+      }
+    }
+    /deep/ .el-form-item__error {
+      color: #F56C6C;
+      font-size: 14px;
+      line-height: 1;
+      padding-top: 4px;
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
+  }
+}

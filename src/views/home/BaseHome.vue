@@ -35,14 +35,8 @@
         </el-aside>
         <!--内容区域-->
         <el-container>
-          <el-main>
+          <el-main><!--所有子页面显示在此处-->
             <div class="grid-content bg-purple-light">
-              <el-col :span="24" class="breadcrumb-container">
-                <strong class="title">{{$route.name}}</strong>
-                <el-breadcrumb separator="/" class="breadcrumb-inner">
-
-                </el-breadcrumb>
-              </el-col>
               <el-col :span="24" class="content-wrapper">
                 <transition name="fade" mode="out-in">
                   <router-view></router-view>
@@ -68,7 +62,7 @@
     name: "BaseHome",
     components: {
       PHead,
-      PFoot
+      PFoot,
     },
     data() {
       return {
