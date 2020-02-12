@@ -1,0 +1,67 @@
+/*基础页面 样式*/
+.BaseHome {
+  width: 100%;
+  background: #EEEEEE;
+  padding: 0.4rem;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  overflow-x: hidden;
+  .baseContainer {
+    background: #fff;
+    height: 100%;
+    .header {
+      height: 60px;
+      line-height: 60px;
+      background: steelblue;
+      color: #fff;
+    }
+    .menu-collapsed { //折叠状态
+      background: #545c64;
+      .CollapseBtn span {
+        margin-left: 40px;
+        & > img {
+          margin-top: 10px;
+        }
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .menu-expanded { //展开状态
+      background: #545c64;
+      .CollapseBtn span {
+        margin-left: 205px;
+        & > img {
+          margin-top: 10px;
+        }
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .el-menu-vertical-demo {
+      border: none;
+    }
+    //展开菜单的宽度
+    .el-menu-vertical-demo:not(.el-menu--collapse) {
+      width: 240px;
+      min-height: auto;
+    }
+    .breadcrumb-container {
+      margin-bottom: 10px;
+    }
+    /*下面设置内容区域（右中）最外层样式*/
+    .el-main {
+      background: rgb(240, 242, 245);
+      max-height:596px; //目的是只有内容区域达到滚动效果 其他边栏固定不动
+    }
+    /*下面设置尾部区域（下）最外层样式*/
+    .el-footer {
+      background: #EEEEEE;
+    }
+  }
+}
+
