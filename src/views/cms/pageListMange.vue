@@ -101,14 +101,14 @@
               prop="id"
               label="序号"
               fixed="left"
-              width="60"
+              min-width="60"
               type="index"
               :index='indexMethod'>
             </el-table-column>
             <el-table-column
               prop="pageName"
               label="页面名称"
-              min-width="100"
+             min-width="200"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
@@ -118,7 +118,7 @@
             <el-table-column
               prop="pageAliase"
               label="页面别名"
-              min-width="100">
+             min-width="200">
               <template slot-scope="scope">
                 {{scope.row.pageAliase||'--'}}
               </template>
@@ -126,7 +126,7 @@
             <el-table-column
               prop="siteId"
               label="站点ID"
-              min-width="100"
+             min-width="200"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
@@ -136,7 +136,7 @@
             <el-table-column
               prop="templateId"
               label="模板ID"
-              min-width="100"
+             min-width="200"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
@@ -146,7 +146,7 @@
             <el-table-column
               prop="pageWebPath"
               label="访问路径"
-              min-width="100"
+             min-width="200"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
@@ -156,26 +156,60 @@
             <el-table-column
               prop="pagePhysicalPath"
               label="物理路径"
-              min-width="100">
+             min-width="200">
               <template slot-scope="scope">
                 {{scope.row.pagePhysicalPath||'--'}}
               </template>
             </el-table-column>
             <el-table-column
+              prop="pageType"
+              label="页面类型"
+             min-width="150">
+              <template slot-scope="scope">
+                {{scope.row.pageType | formType}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="htmlFileId"
+              label="静态文件ID"
+             min-width="200">
+              <template slot-scope="scope">
+                {{scope.row.htmlFileId||'--'}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="pageStatus"
+              label="页面状态"
+             min-width="200">
+              <template slot-scope="scope">
+                {{scope.row.pageStatus||'--'}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="dataUrl"
+              label="访问路径"
+             min-width="200">
+              <template slot-scope="scope">
+                {{scope.row.dataUrl||'--'}}
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="pageCreateTime"
               label="创建时间"
-              min-width="100"
+             min-width="200"
               :show-overflow-tooltip="true"
               :formatter="formatterTime"
             >
             </el-table-column>
             <el-table-column
               label="操作"
-              width="100"
+              width="150"
+              align="center"
               fixed="right">
               <template slot-scope="scope">
-                <span class="tab-btn" @click="pageDetail(scope.row.id)">详情</span>
-                <span class="tab-btn" @click="updatePageBtn(scope.row.id)">编辑</span>
+                <span class="tab-btn" @click.stop="pageDetail(scope.row.pageId)">详情</span>
+                <span class="tab-btn" @click.stop="updatePageBtn(scope.row)">编辑</span>
+                <span class="tab-btn" @click.stop="deletePageBtn(scope.row.pageId)">删除</span>
               </template>
             </el-table-column>
           </el-table>
@@ -202,17 +236,24 @@
       @addModel="addSuccess"
       @closeModel="closeSuccess">
     </editor-page>
+    <!--查看详情-->
+    <page-detail
+      :detailFlag.sync="seePageDetail"
+      @closeModel="closeSuccess">
+    </page-detail>
   </div>
 </template>
 
 <script>
   import moment from 'moment';
-  import {findPageListApi} from '../../service/cms'
+  import {findPageListApi,deletePageApi,findPageApi} from '../../service/cms'
   import editorPage from './editorPage'
+  import pageDetail from './pageDetail'
 
   export default {
     components: {
-      editorPage
+      editorPage,
+      pageDetail
     },
     data() {
       return {
@@ -225,6 +266,11 @@
         updatePageFlag: {
           visible: false,
           title: '编辑页面',
+          data: {}
+        },
+        seePageDetail: {
+          visible: false,
+          title: '查看详情',
           data: {}
         },
         //时间选择器 默认时间
@@ -296,7 +342,15 @@
       this.showListInfo();
       this.getBreadcrumb();
     },
-    filters: {},
+    filters: {
+      formType(val){
+          if (val === 1) {
+            return '动态';
+          } else {
+            return '静态';
+          }
+      }
+    },
     methods: {
       //格式化时间
       timeFormat() {
@@ -385,31 +439,55 @@
           console.log('编辑', val);
           this.updatePageFlag.data = val; //传值给子组件
         }
+      },
+      deletePageBtn(val){
+        deletePageApi(val).then(res=>{
+            if(res.success){
+              this.$message.success("删除成功！");
+              this.showListInfo();
+            }else {
+              this.$message.success("删除失败！")
+            }
+        })
+      },
+      //点确定之后回调
+      addSuccess(val) {
+        if(val){
+          this.flag=false;
+          this.addPageFlag.visible = false;
+          this.updatePageFlag.visible = false;
+          this.showListInfo();
+        }
+      },
+      //点关闭之后回调
+      closeSuccess() {
+        this.flag=false;
+        this.addPageFlag.visible = false;
+        this.updatePageFlag.visible = false;
+        this.seePageDetail.visible=false;
+      },
+      //详情方法 id [String] 记录id
+      pageDetail(val) {
+        findPageApi(val).then(res=>{
+          if(res.success){
+            this.seePageDetail.visible=true;
+            this.seePageDetail.data={...res.data};
+          }else {
+            this.$message.error("查看详情失败！")
+          }
+        })
+      },
+      //重置按钮 formName [Object] 表单数据
+      resetForm() {
+        for (let k in this.searchPageParams) {
+          this.searchPageParams[k] = '';
+        }
+        this.searchPageParams.pageNo = 0;
+        this.searchPageParams.pageSize = 10;
+        this.timeFormat();
+        this.copyParmas = {...this.searchPageParams};
+        this.showListInfo();
       }
-    },
-    //点确定之后回调
-    addSuccess() {
-
-    },
-    //点关闭之后回调
-    closeSuccess() {
-      this.addPageFlag.visible = false;
-      this.updatePageFlag.visible = false;
-    },
-    //详情方法 id [String] 记录id
-    pageDetail() {
-
-    },
-    //重置按钮 formName [Object] 表单数据
-    resetForm() {
-      for (let k in this.searchPageParams) {
-        this.searchPageParams[k] = '';
-      }
-      this.searchPageParams.pageNo = 0;
-      this.searchPageParams.pageSize = 10;
-      this.timeFormat();
-      this.copyParmas = {...this.searchPageParams};
-      this.showListInfo();
     }
   };
 </script>

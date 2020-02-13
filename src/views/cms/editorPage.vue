@@ -6,7 +6,7 @@
     top="10vh"
     :before-close="handleClose">
     <div class="editor-box">
-      <el-form ref="pageForm" :model="pageForm" label-width="80px" :rules="rules">
+      <el-form ref="pageForm" :model="pageForm" label-width="90px" :rules="rules">
         <div class="item">
           <el-form-item label="所属站点" prop="siteId">
             <el-select v-model="pageForm.siteId" placeholder="请选择所属站点">
@@ -37,18 +37,30 @@
             <el-input v-model="pageForm.pageAliase"></el-input>
           </el-form-item>
         </div>
-        <el-form-item label="访问路径" prop="pageWebPath">
-          <el-input v-model="pageForm.pageWebPath"></el-input>
+        <div class="item">
+          <el-form-item label="页面状态" prop="pageStatus">
+            <el-input v-model="pageForm.pageStatus"></el-input>
+          </el-form-item>
+          <el-form-item label="访问地址" prop="pageWebPath">
+            <el-input v-model="pageForm.pageWebPath"></el-input>
+          </el-form-item>
+        </div>
+        <div class="item">
+          <el-form-item label="页面类型">
+            <el-radio-group v-model="pageForm.pageType">
+              <el-radio class="radio" label="0">静态</el-radio>
+              <el-radio class="radio" label="1">动态</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="静态文件ID" prop="htmlFileId">
+            <el-input v-model="pageForm.htmlFileId"></el-input>
+          </el-form-item>
+        </div>
+        <el-form-item label="请求路径" prop="dataUrl">
+          <el-input v-model="pageForm.dataUrl"></el-input>
         </el-form-item>
         <el-form-item label="物理路径" prop="pagePhysicalPath">
           <el-input v-model="pageForm.pagePhysicalPath"></el-input>
-        </el-form-item>
-
-        <el-form-item label="页面类型">
-          <el-radio-group v-model="pageForm.pageType">
-            <el-radio class="radio" label="0">静态</el-radio>
-            <el-radio class="radio" label="1">动态</el-radio>
-          </el-radio-group>
         </el-form-item>
         <el-form-item label="创建时间">
           <el-date-picker
@@ -61,15 +73,17 @@
     </div>
     <span slot="footer" class="dialog-footer" v-if="!flag">
     <el-button @click="cancelBtn">取 消</el-button>
-    <el-button type="primary" @click="confirmBtn('pageForm','add')"  :loading="saveLoading">确 定</el-button>
+    <el-button type="primary" @click="confirmBtn('pageForm','add')" :loading="saveLoading">确 定</el-button>
   </span>
     <span slot="footer" class="dialog-footer" v-if="flag">
     <el-button @click="cancelBtn">取 消</el-button>
-    <el-button type="primary" @click="confirmBtn('pageForm','update')"  :loading="saveLoading">保 存</el-button>
+    <el-button type="primary" @click="confirmBtn('pageForm','update')" :loading="saveLoading">保 存</el-button>
   </span>
   </el-dialog>
 </template>
 <script>
+  import {addPageApi, updatePageApi} from '../../service/cms'
+
   export default {
     props: {
       editorFlag: {
@@ -82,10 +96,25 @@
         default: false
       }
     },
+    watch: {
+      editorFlag: {
+        handler(newVal) {
+          if (this.flag && newVal && newVal.data) { //修改
+            this.pageForm = {//解构赋值
+              ...newVal.data
+            };
+          } else {//添加
+            this.init();
+          }
+        },
+        deep: true
+      }
+    },
     data() {
       return {
         saveLoading: false,
         pageForm: {
+          pageId: '',//唯一标识（主键）
           siteId: '',
           templateId: '',
           pageName: '',
@@ -94,7 +123,13 @@
           pageParameter: '',
           pagePhysicalPath: '',
           pageType: '',
-          pageCreateTime: new Date()
+          pageCreateTime: '',
+          pageHtml:'',
+          pageStatus:'',
+          pageParams:[],
+          htmlFileId:'',
+          dataUrl:'',
+          pageTemplate:'',
         },
         siteList: [
           {
@@ -117,27 +152,30 @@
             templateName: '轮播图'
           }
         ],
-        rules:{
+        rules: {
           siteId: [
-            {required: true, message: '请选择站点ID'}, //不能为空
+            {required: true, message: '请选择站点ID', trigger: 'blur'}, //不能为空
           ],
           templateId: [
-            {required: true, message: '请选择模板ID'}, //不能为空
+            {required: true, message: '请选择模板ID', trigger: 'blur'}, //不能为空
           ],
           pageName: [
-            {required: true, message: '请输入页面名称'},
-            {max: 255, message: '长度不要超过255个字符'}
+            {required: true, message: '请输入页面名称', trigger: 'blur'},
+            {max: 255, message: '长度不要超过255个字符', trigger: 'blur'}
           ],
           pageWebPath: [
-            {required: true, message: '请输入访问路径'},
-            {max: 255, message: '长度不要超过255个字符'}
+            {required: true, message: '请输入访问地址', trigger: 'blur'},
+            {max: 255, message: '长度不要超过255个字符', trigger: 'blur'}
           ],
           pagePhysicalPath: [
-            {required: true, message: '请输入物理路径'},
-            {max: 255, message: '长度不要超过255个字符'}
+            {required: true, message: '请输入物理路径', trigger: 'blur'},
+            {max: 255, message: '长度不要超过255个字符', trigger: 'blur'}
           ]
         }
       };
+    },
+    created() {
+      this.init();
     },
     methods: {
       handleClose(done) {
@@ -147,6 +185,13 @@
           })
           .catch(_ => {
           });
+        this.$refs['pageForm'].resetFields();
+      },
+      init() {
+        for (let k in this.pageForm) {
+          this.pageForm[k] = "";
+        }
+        this.pageForm.pageCreateTime = new Date();//date类型 MongoDB CST/UTC之间自动转换 保存到数据库
       },
       cancelBtn() {
         this.saveLoading = false;
@@ -155,13 +200,24 @@
       },
       confirmBtn(formName, type) {
         this.$refs[formName].validate((valid) => {
-          if(true){
-
+          if (valid) {
+            let params = {
+              siteId: this.pageForm.siteId,
+              templateId: this.pageForm.templateId,
+              pageName: this.pageForm.pageName,
+              pageAliase: this.pageForm.pageAliase,
+              pageWebPath: this.pageForm.pageWebPath,
+              pagePhysicalPath: this.pageForm.pagePhysicalPath,
+              pageType: this.pageForm.pageType,
+              pageCreateTime: this.pageForm.pageCreateTime,
+              pageStatus:this.pageForm.pageStatus,
+              dataUrl: this.pageForm.dataUrl,
+              htmlFileId:this.pageForm.htmlFileId
+            };
             if (type === 'add') { //添加
               this.saveLoading = true;
               this.addPage(params);
             } else if (type === 'update') { //修改
-              params.id = _this.form.id;
               this.saveLoading = true;
               this.updatePage(params);
             }
@@ -169,11 +225,31 @@
         });
       },
       /*调用服务接口*/
-      addPage(){
-
+      addPage(params) {
+        addPageApi(params).then(res => {
+          console.log("添加参数", params);
+          if (res.success) {
+            this.$message.success("添加成功！");
+            this.saveLoading = false;
+            this.$emit('addModel', true);
+            this.$refs['pageForm'].resetFields();
+          } else {
+            this.$message.error("添加失败！")
+          }
+        })
       },
-      updatePage(){
-
+      updatePage(params) {
+        updatePageApi(this.pageForm.pageId,params).then(res => {
+          console.log("编辑参数", params);
+          if (res.success) {
+            this.$message.success("编辑成功！");
+            this.$emit('addModel', true);
+            this.saveLoading = false;
+            this.$refs['pageForm'].resetFields();
+          } else {
+            this.$message.error("编辑失败！")
+          }
+        })
       }
     }
   }
