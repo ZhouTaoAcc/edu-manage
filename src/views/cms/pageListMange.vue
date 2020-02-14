@@ -371,7 +371,7 @@
         let matched = this.$route.matched.filter(item => item.name);
         const first = matched[0];
         if (first && first.name !== '') {
-          matched = [{path: '/', meta: {title: 'CMS页面管理'}}].concat(matched)
+          matched = [{path: '/cms', meta: {title: 'CMS页面管理'}}].concat(matched)
         }
         this.levelList = matched;
       },

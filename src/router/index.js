@@ -11,41 +11,47 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: '/',
+      path:'/',
+      name:'',
+      redirect: '/cms',//路由重定向
+      hidden:true //菜单是否隐藏
+    },
+    {
+      path: '/cms',
       name: 'CMS页面管理',
       icon:'el-icon-document',
       component: Home,
       meta: { requiresAuth: true },
       children:[
         {
-          path:'cms/page/list',
+          path:'/page/list',
           name:'页面列表',
           component: pageList,
           hidden:false,
           meta: { title: '页面列表' }
         },
         {
-          path:'cms/template/list',
+          path:'/template/list',
           name:'模板管理',
           component: templateListManage,
           hidden:false,
           meta: { title: '模板管理' }
         },
         {
-          path:'cms/page/list3',
+          path:'/page/list3',
           name:'页面列表3',
           component: pageList,
-          hidden:false,
+          hidden:true,
           meta: { title: '页面列表3' }
         },
         {
-          path:'cms/page/list4',
+          path:'/page/list4',
           name:'页面列表4',
           component: pageList,
-          hidden:false
+          hidden:true
         },
         {
-          path:'cms/page/list5',
+          path:'/page/list5',
           name:'页面列表',
           component: pageList,
           hidden:false
@@ -53,7 +59,7 @@ export default new Router({
       ]
     },
     {
-      path: '/',
+      path: '/course',
       name: '课程管理',
       icon:'el-icon-notebook-1',
       component: Home,

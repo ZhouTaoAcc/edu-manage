@@ -23,7 +23,7 @@
                    @open="handleOpen"
                    @close="handleClose"
                    :collapse="isCollapse">
-            <template v-for="(item,index) in $router.options.routes">
+            <template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
               <el-submenu :index="index+''">
                 <template slot="title"><i :class="item.icon"></i><span slot="title">{{item.name}}</span></template>
                 <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">
