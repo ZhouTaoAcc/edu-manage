@@ -56,7 +56,7 @@
             <el-input v-model="pageForm.htmlFileId"></el-input>
           </el-form-item>
         </div>
-        <el-form-item label="请求路径" prop="dataUrl">
+        <el-form-item label="页面数据Url" prop="dataUrl">
           <el-input v-model="pageForm.dataUrl"></el-input>
         </el-form-item>
         <el-form-item label="物理路径" prop="pagePhysicalPath">
@@ -73,7 +73,7 @@
     </div>
     <span slot="footer" class="dialog-footer" v-if="!flag">
     <el-button @click="cancelBtn">取 消</el-button>
-    <el-button type="primary" @click="confirmBtn('pageForm','add')" :loading="saveLoading">确 定</el-button>
+    <el-button type="primary" @click="confirmBtn('pageForm','add')" :loading="saveLoading">提 交</el-button>
   </span>
     <span slot="footer" class="dialog-footer" v-if="flag">
     <el-button @click="cancelBtn">取 消</el-button>
@@ -185,9 +185,10 @@
           })
           .catch(_ => {
           });
+        this.saveLoading = false;
         this.$refs['pageForm'].resetFields();
       },
-      init() {
+      init() {//初始化
         for (let k in this.pageForm) {
           this.pageForm[k] = "";
         }
@@ -228,13 +229,14 @@
       addPage(params) {
         addPageApi(params).then(res => {
           console.log("添加参数", params);
+          console.log("返回结果", res);
           if (res.success) {
             this.$message.success("添加成功！");
             this.saveLoading = false;
             this.$emit('addModel', true);
             this.$refs['pageForm'].resetFields();
-          } else {
-            this.$message.error("添加失败！")
+          }else{
+            this.$message.error(res.message)
           }
         })
       },
@@ -247,7 +249,7 @@
             this.saveLoading = false;
             this.$refs['pageForm'].resetFields();
           } else {
-            this.$message.error("编辑失败！")
+            this.$message.error(res.message);
           }
         })
       }

@@ -96,6 +96,7 @@
         <div class="edu-pageList-tab">
           <el-table
             :data="tablePageData"
+            stripe
           >
             <el-table-column
               prop="id"
@@ -145,8 +146,9 @@
             </el-table-column>
             <el-table-column
               prop="pageWebPath"
-              label="访问路径"
-             min-width="200"
+              label="访问地址"
+             min-width="150"
+              align="center"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
@@ -156,7 +158,8 @@
             <el-table-column
               prop="pagePhysicalPath"
               label="物理路径"
-             min-width="200">
+             min-width="200"
+              :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 {{scope.row.pagePhysicalPath||'--'}}
               </template>
@@ -164,7 +167,8 @@
             <el-table-column
               prop="pageType"
               label="页面类型"
-             min-width="150">
+             min-width="150"
+            align="cneter">
               <template slot-scope="scope">
                 {{scope.row.pageType | formType}}
               </template>
@@ -172,7 +176,8 @@
             <el-table-column
               prop="htmlFileId"
               label="静态文件ID"
-             min-width="200">
+             min-width="200"
+              :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 {{scope.row.htmlFileId||'--'}}
               </template>
@@ -180,6 +185,7 @@
             <el-table-column
               prop="pageStatus"
               label="页面状态"
+              align="center"
              min-width="200">
               <template slot-scope="scope">
                 {{scope.row.pageStatus||'--'}}
@@ -187,8 +193,9 @@
             </el-table-column>
             <el-table-column
               prop="dataUrl"
-              label="访问路径"
-             min-width="200">
+              label="页面数据Url"
+             min-width="200"
+              :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 {{scope.row.dataUrl||'--'}}
               </template>
@@ -364,7 +371,7 @@
         let matched = this.$route.matched.filter(item => item.name);
         const first = matched[0];
         if (first && first.name !== '') {
-          matched = [{path: '/', meta: {title: '后台管理系统'}}].concat(matched)
+          matched = [{path: '/', meta: {title: 'CMS页面管理'}}].concat(matched)
         }
         this.levelList = matched;
       },
@@ -374,7 +381,7 @@
           console.log("查询条件--》", this.copyParmas);
           console.log("查询分页", res);
           this.tablePageData = res.data.list;
-          this.totalCount = res.total;
+          this.totalCount = res.data.total;
         }, err => {
           this.$message.warning(err);
         });
@@ -445,8 +452,8 @@
             if(res.success){
               this.$message.success("删除成功！");
               this.showListInfo();
-            }else {
-              this.$message.success("删除失败！")
+            }else{
+              this.$message.error(res.message)
             }
         })
       },
@@ -472,8 +479,8 @@
           if(res.success){
             this.seePageDetail.visible=true;
             this.seePageDetail.data={...res.data};
-          }else {
-            this.$message.error("查看详情失败！")
+          }else{
+            this.$message.error(res.message)
           }
         })
       },

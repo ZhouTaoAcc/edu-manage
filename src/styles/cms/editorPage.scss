@@ -31,5 +31,8 @@
       top: 100%;
       left: 0;
     }
+    /deep/ .el-date-editor.el-input, .el-date-editor.el-input__inner {
+      width: 250px;
+    }
   }
 }

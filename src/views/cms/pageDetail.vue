@@ -6,7 +6,7 @@
     top="10vh"
     :before-close="handleClose">
     <div class="editor-box">
-      <el-form ref="pageDate" :model="pageDate" label-width="90px">
+      <el-form ref="pageDate" :model="pageDate" label-width="100px">
         <div class="item">
           <el-form-item label="所属站点:" prop="siteId">
             <span class="row-span">
@@ -55,7 +55,7 @@
 						</span>
           </el-form-item>
         </div>
-        <el-form-item label="请求路径:" prop="dataUrl">
+        <el-form-item label="页面数据Url:" prop="dataUrl">
           <span class="row-span">
 							{{pageDate.dataUrl}}
 						</span>

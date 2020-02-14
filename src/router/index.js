@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/home/BaseHome'
 import pageList from '@/views/cms/pageListMange'
-
+import templateListManage from '../views/cms/templateListMange'
 
 
 
@@ -12,7 +12,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: '后台管理系统',
+      name: 'CMS页面管理',
       icon:'el-icon-document',
       component: Home,
       meta: { requiresAuth: true },
@@ -25,11 +25,11 @@ export default new Router({
           meta: { title: '页面列表' }
         },
         {
-          path:'cms/page/list2',
-          name:'页面列表2',
-          component: pageList,
+          path:'cms/template/list',
+          name:'模板管理',
+          component: templateListManage,
           hidden:false,
-          meta: { title: '页面列表2' }
+          meta: { title: '模板管理' }
         },
         {
           path:'cms/page/list3',
