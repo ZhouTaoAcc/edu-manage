@@ -18,13 +18,17 @@
           </el-select>
         </el-form-item>
         <el-form-item label="模板名称" prop="templateName">
-          <el-input v-model="templateForm.templateName"></el-input>
+          <el-input v-model="templateForm.templateName" placeholder="请输入模板名称"></el-input>
         </el-form-item>
         <el-form-item label="模板参数">
-          <el-input v-model="templateForm.templateParameter"></el-input>
+          <el-input v-model="templateForm.templateParameter" placeholder="请输入模板参数"></el-input>
+        </el-form-item>
+        <el-form-item label="模板文件路径" prop="fileUrl">
+          <el-input v-model="fileUrl" placeholder="如:C:\Users\zt\Desktop\tip11.txt"></el-input>
+          <el-button @click="uploadBtn">上传</el-button>
         </el-form-item>
         <el-form-item label="模板文件ID" prop="templateFileId">
-          <el-input v-model="templateForm.templateFileId"></el-input>
+          <el-input v-model="templateForm.templateFileId" disabled></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -39,7 +43,12 @@
   </el-dialog>
 </template>
 <script>
-  import {addTemplateApi, updateTemplateApi} from '../../service/cms'
+  import {
+    addTemplateApi,
+    updateTemplateApi,
+    uploadTemplateFileApi,
+    deleteTemplateFileApi
+  } from '../../service/cms'
 
   export default {
     props: {
@@ -60,6 +69,7 @@
             this.templateForm = {//解构赋值
               ...newVal.data
             };
+            this.oldFileId = newVal.data.templateFileId;
           } else {//添加
             this.init();
           }
@@ -69,7 +79,11 @@
     },
     data() {
       return {
+        btnName: '上传',
+        oldFileId: '',//用于保存已经上传的文件id
+        isUploadSuccess: false,
         saveLoading: false,
+        fileUrl: '',
         templateForm: {
           templateId: '',//主键
           siteId: '',
@@ -96,7 +110,7 @@
             {max: 255, message: '长度不要超过255个字符', trigger: 'blur'}
           ],
           templateFileId: [
-            {required: true, message: '请输入模板文件ID', trigger: 'blur'},
+            {required: true, message: '模板文件ID不能为空！', trigger: 'blur'},
             {max: 255, message: '长度不要超过255个字符', trigger: 'blur'}
           ]
         }
@@ -120,11 +134,47 @@
         for (let k in this.templateForm) {
           this.templateForm[k] = "";
         }
+        this.fileUrl = '';
+        this.isUploadSuccess = false;
       },
       cancelBtn() {
         this.saveLoading = false;
         this.$emit('closeModel');
         this.$refs['templateForm'].resetFields();
+      },
+      //上传文件模板
+      uploadBtn() {
+        let url = this.formatUrl(this.fileUrl);
+        if (this.flag && this.oldFileId) {//编辑状态时上传文件成功 删除旧文件
+          let id = this.oldFileId;
+          uploadTemplateFileApi(url).then(res => {
+            console.log('返回结果',res);
+            if(typeof res === 'object'&&!res.success){//此时已经说明后台返回的是异常信息
+              this.$message.error(res.message);
+            } else {
+              this.isUploadSuccess = true;//标识上传成功
+              this.templateForm.templateFileId = res;
+              deleteTemplateFileApi(id).then(res => {
+                  this.$message.error(res.message);
+              })
+            }
+          })
+        } else {
+          uploadTemplateFileApi(url).then(res => {
+            if(typeof res === 'object'&&!res.success){//此时已经说明后台返回的是异常信息
+                this.$message.error(res.message);
+            }else {
+              this.isUploadSuccess = true;//标识上传成功
+              this.templateForm.templateFileId = res;
+            }
+          })
+        }
+      },
+      formatUrl(val) {//对路径的操作
+        if (val !== '') {
+          let url = val.replace(/\\/g, "\/");
+          return url;
+        }
       },
       confirmBtn(formName, type) {
         this.$refs[formName].validate((valid) => {
@@ -159,6 +209,7 @@
             this.$message.error(res.message)
           }
         })
+
       },
       updatePage(params) {
         updateTemplateApi(this.templateForm.templateId, params).then(res => {
@@ -174,6 +225,7 @@
         })
       }
     }
+
   }
 </script>
 

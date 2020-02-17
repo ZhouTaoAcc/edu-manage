@@ -8,6 +8,11 @@
     <div class="editor-box">
       <el-form ref="pageDate" :model="pageDate" label-width="100px">
         <div class="item">
+          <el-form-item label="页面ID:" prop="pageId">
+            <span class="row-span">
+							{{pageDate.pageId}}
+						</span>
+          </el-form-item>
           <el-form-item label="所属站点:" prop="siteId">
             <span class="row-span">
 							{{pageDate.siteId}}
@@ -95,8 +100,8 @@
       },
       watch:{
         detailFlag:{
-          handler(newval){
-            this.pageDate={...newval.data}
+          handler(newVal){
+            this.pageDate={...newVal.data}
           },
           deep:true
         }

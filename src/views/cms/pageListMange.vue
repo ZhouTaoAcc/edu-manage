@@ -107,6 +107,16 @@
               :index='indexMethod'>
             </el-table-column>
             <el-table-column
+              prop="pageId"
+              label="页面ID"
+              min-width="200"
+              :show-overflow-tooltip="true"
+            >
+              <template slot-scope="scope">
+                {{scope.row.pageId||'--'}}
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="pageName"
               label="页面名称"
              min-width="200"
@@ -126,7 +136,7 @@
             </el-table-column>
             <el-table-column
               prop="siteId"
-              label="站点ID"
+              label="所属站点ID"
              min-width="200"
               :show-overflow-tooltip="true"
             >
@@ -136,7 +146,7 @@
             </el-table-column>
             <el-table-column
               prop="templateId"
-              label="模板ID"
+              label="所属模板ID"
              min-width="200"
               :show-overflow-tooltip="true"
             >
@@ -210,13 +220,15 @@
             </el-table-column>
             <el-table-column
               label="操作"
-              width="150"
+              width="280"
               align="center"
               fixed="right">
               <template slot-scope="scope">
-                <span class="tab-btn" @click.stop="pageDetail(scope.row.pageId)">详情</span>
-                <span class="tab-btn" @click.stop="updatePageBtn(scope.row)">编辑</span>
-                <span class="tab-btn" @click.stop="deletePageBtn(scope.row.pageId)">删除</span>
+                <span class="el-icon-chat-line-round tab-btn" @click.stop="pageDetail(scope.row.pageId)">详情</span>
+                <span class="el-icon-edit-outline tab-btn" @click.stop="updatePageBtn(scope.row)">编辑</span>
+                <span class="el-icon-delete tab-btn" @click.stop="deletePageBtn(scope.row.pageId)">删除</span>
+                <span class="el-icon-view tab-btn"  @click.stop="previewPageBtn(scope.row.pageId)">预览</span>
+                <span class="el-icon-position tab-btn" @click.stop="releasePageBtn(scope.row.pageId)">发布</span>
               </template>
             </el-table-column>
           </el-table>
@@ -393,22 +405,22 @@
         this.showListInfo();
       },
       //导出excel
-      /*exportDataList() {
-        const params = {...this.copyParmas};
-        delete params.pageSize;
-        delete params.pageNo;
-        goodsListExportApi(params).then(res => {
-          const blob = new Blob([res.data]);
-          const href = window.URL.createObjectURL(blob);
-          let downloadElement = document.createElement('a');
-          downloadElement.href = href;
-          downloadElement.download = 'XX.xlsx';
-          document.body.appendChild(downloadElement);
-          downloadElement.click();
-          document.body.removeChild(downloadElement);
-          window.URL.revokeObjectURL(href);
-        });
-      },*/
+      // exportDataList() {
+      //   const params = {...this.copyParmas};
+      //   delete params.pageSize;
+      //   delete params.pageNo;
+      //   goodsListExportApi(params).then(res => {
+      //     const blob = new Blob([res.data]);
+      //     const href = window.URL.createObjectURL(blob);
+      //     let downloadElement = document.createElement('a');
+      //     downloadElement.href = href;
+      //     downloadElement.download = 'XX.xlsx';
+      //     document.body.appendChild(downloadElement);
+      //     downloadElement.click();
+      //     document.body.removeChild(downloadElement);
+      //     window.URL.revokeObjectURL(href);
+      //   });
+      // },
       //转换时间格式 row [Number] 行 column [Number] 列 cellValue [String] 对应的值
       formatterTime(row, column, cellValue) {
         if (cellValue != null) {
@@ -448,14 +460,28 @@
         }
       },
       deletePageBtn(val){
-        deletePageApi(val).then(res=>{
+        this.$confirm('确定删除该记录吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deletePageApi(val).then(res=>{
             if(res.success){
-              this.$message.success("删除成功！");
+              this.$message.success(res.message);
               this.showListInfo();
             }else{
               this.$message.error(res.message)
             }
-        })
+          })
+        });
+      },
+      //页面预览
+      previewPageBtn(val){
+        window.open('http://localhost:31001/cms/page/pagePreview/'+val);
+      },
+      //页面发布
+      releasePageBtn(){
+
       },
       //点确定之后回调
       addSuccess(val) {

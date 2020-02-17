@@ -43,3 +43,23 @@ export const updateTemplateApi=(id,params)=>{
 export const deleteTemplateApi=(id)=>{
   return Http.requestDelete(urlPre+'/cms/template/delete/'+id)
 };
+
+/*对模板文件的处理 上传下载删除API*/
+
+//参数 文件所在路径 上传文件
+export const uploadTemplateFileApi=(url)=>{
+  return Http.requestQuickGet(urlPre+'/cms/template/uploadTemplateFile'+'?url='+url)
+};
+//参数 文件在GridFS中的id 下载文件
+export const readTemplateFileApi=(id,type)=>{
+  return Http.requestQuickGet(urlPre+'/cms/template/readTemplateFile'+'?id='+id+'&type='+type)
+};
+//参数 文件在GridFS中的id 删除文件
+export const deleteTemplateFileApi=(id)=>{
+  return Http.requestQuickGet(urlPre+'/cms/template/deleteTemplateFile'+'?id='+id)
+};
+
+//页面发布
+// export const previewPageApi=(id)=>{
+//   return Http.requestQuickGet(urlPre+'/cms/template/deleteTemplateFile'+'?id='+id)
+// };

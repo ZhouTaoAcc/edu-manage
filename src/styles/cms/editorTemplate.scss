@@ -5,9 +5,18 @@
     width: 100%;
     padding-left: 165px;
     /deep/ .el-form-item {
-      width: 400px;
+      width: 350px;
       /deep/ .el-form-item__content {
         width: 250px;
+      }
+      &:nth-child(4){
+        /deep/ .el-form-item__content {
+          width: 250px;
+          display: flex;
+        }
+        .el-button {
+          margin-left: 20px;
+        }
       }
     }
     /deep/ .el-form-item__error {

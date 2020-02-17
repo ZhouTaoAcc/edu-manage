@@ -20,21 +20,32 @@
         ref="searchTemplateParams"
       >
         <div class="edu-templateList-fdy">
+          <!--<el-form-item-->
+          <!--label="所属站点："-->
+          <!--class="edu-templateList-fiu"-->
+          <!--prop="siteId"-->
+          <!--&gt; -->
+          <!--<el-select v-model="searchTemplateParams.siteId" placeholder="请选择站点"-->
+          <!--clearable>   -->
+          <!--<el-option-->
+          <!--v-for="item in siteList"-->
+          <!--:key="item.siteId"-->
+          <!--:label="item.siteName"-->
+          <!--:value="item.siteId">    -->
+          <!--</el-option>-->
+          <!--  -->
+          <!--</el-select>-->
+          <!--</el-form-item>-->
           <el-form-item
-            label="所属站点："
+            label="模板ID："
             class="edu-templateList-fiu"
-            prop="siteId"
-          > 
-            <el-select v-model="searchTemplateParams.siteId" placeholder="请选择站点"
-                       clearable>   
-              <el-option
-                v-for="item in siteList"
-                :key="item.siteId"
-                :label="item.siteName"
-                :value="item.siteId">    
-              </el-option>
-                
-            </el-select>
+            prop="templateName"
+          >
+            <el-input
+              v-model="searchTemplateParams.templateId"
+              placeholder="请输入模板ID"
+              :clearable="true"
+            ></el-input>
           </el-form-item>
           <el-form-item
             label="模板名称："
@@ -95,8 +106,18 @@
               :index='indexMethod'>
             </el-table-column>
             <el-table-column
+              prop="templateId"
+              label="模板ID"
+              min-width="200"
+              :show-overflow-tooltip="true"
+            >
+              <template slot-scope="scope">
+                {{scope.row.templateId||'--'}}
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="siteId"
-              label="所属站点"
+              label="所属站点ID"
               min-width="200"
               :show-overflow-tooltip="true"
             >
@@ -107,7 +128,7 @@
             <el-table-column
               prop="templateName"
               label="模板名称"
-              min-width="200">
+              min-width="150">
               <template slot-scope="scope">
                 {{scope.row.templateName||'--'}}
               </template>
@@ -115,7 +136,7 @@
             <el-table-column
               prop="templateParameter"
               label="模板参数"
-              min-width="200"
+              min-width="150"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
@@ -125,7 +146,7 @@
             <el-table-column
               prop="templateFileId"
               label="模板文件ID"
-              min-width="200"
+              min-width="250"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
@@ -134,12 +155,14 @@
             </el-table-column>
             <el-table-column
               label="操作"
-              width="150"
+              width="200"
               align="center"
               fixed="right">
               <template slot-scope="scope">
-                <span class="tab-btn" @click.stop="updateTemplateBtn(scope.row)">编辑</span>
-                <span class="tab-btn" @click.stop="deleteTemplateBtn(scope.row.templateId)">删除</span>
+                <span class="el-icon-download tab-btn"
+                      @click.stop="exportTemplateBtn(scope.row.templateFileId)">导出文件</span>
+                <span class="el-icon-edit-outline tab-btn" @click.stop="updateTemplateBtn(scope.row)">编辑</span>
+                <span class="el-icon-delete tab-btn" @click.stop="deleteTemplateBtn(scope.row.templateId)">删除</span>
               </template>
             </el-table-column>
           </el-table>
@@ -170,8 +193,12 @@
 </template>
 
 <script>
-  import {findTemplateListApi,deleteTemplateApi} from '../../service/cms'
-  import  editorTemplate from './editorTemplate'
+  import {
+    findTemplateListApi,
+    deleteTemplateApi,
+    readTemplateFileApi,
+  } from '../../service/cms'
+  import editorTemplate from './editorTemplate'
 
 
   export default {
@@ -193,7 +220,8 @@
         },
         //分页搜索参数
         searchTemplateParams: {
-          siteId: '',
+          templateId: '',
+          // siteId: '',
           templateName: '',
           templateFileId: '', //模板文件ID
           pageNo: 0, //页码
@@ -221,16 +249,13 @@
         this.getBreadcrumb();
       }
     },
-    computed: {
-
-    },
+    computed: {},
     mounted() {
       this.copyParmas = {...this.searchTemplateParams};
       this.showListInfo();
       this.getBreadcrumb();
     },
-    filters: {
-    },
+    filters: {},
     methods: {
       //生成面包屑
       getBreadcrumb() {
@@ -280,6 +305,26 @@
         this.flag = false;
         this.addTemplateFlag.visible = true;
       },
+      //导出模板文件
+      exportTemplateBtn(val) {
+        if (val) {
+          this.$alert('将文件导出到桌面！', '温馨提示', {
+            confirmButtonText: '确定',
+            callback: (action ) => {
+              if(action==="confirm"){
+                readTemplateFileApi(val, 1).then(res => {//第二个参数为1 表示下载文件
+                  if(res.success){
+                    this.$message.success(res.message);
+                  }else {
+                    this.$message.error(res.message);
+                  }
+                })
+              }
+            }
+          })
+        }
+      },
+      //编辑
       updateTemplateBtn(val) {
         if (val) {
           this.flag = true;
@@ -288,20 +333,27 @@
           this.updateTemplateFlag.data = val; //传值给子组件
         }
       },
-      deleteTemplateBtn(val){
-        deleteTemplateApi(val).then(res=>{
-          if(res.success){
-            this.$message.success("删除成功！");
-            this.showListInfo();
-          }else{
-            this.$message.error(res.message)
-          }
+      //删除
+      deleteTemplateBtn(val) {
+        this.$confirm('确定删除该记录吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteTemplateApi(val).then(res => {
+            if (res.success) {
+              this.$message.success("删除成功！");
+              this.showListInfo();
+            } else {
+              this.$message.error(res.message)
+            }
+          })
         })
       },
       //点确定之后回调
       addSuccess(val) {
-        if(val){
-          this.flag=false;
+        if (val) {
+          this.flag = false;
           this.addTemplateFlag.visible = false;
           this.updateTemplateFlag.visible = false;
           this.showListInfo();
@@ -309,7 +361,7 @@
       },
       //点关闭之后回调
       closeSuccess() {
-        this.flag=false;
+        this.flag = false;
         this.addTemplateFlag.visible = false;
         this.updateTemplateFlag.visible = false;
       },
