@@ -97,6 +97,7 @@
           <el-table
             :data="tablePageData"
             stripe
+            v-loading="loading"
           >
             <el-table-column
               prop="id"
@@ -203,7 +204,7 @@
             </el-table-column>
             <el-table-column
               prop="dataUrl"
-              label="页面数据Url"
+              label="数据URL"
              min-width="200"
               :show-overflow-tooltip="true">
               <template slot-scope="scope">
@@ -265,7 +266,7 @@
 
 <script>
   import moment from 'moment';
-  import {findPageListApi,deletePageApi,findPageApi} from '../../service/cms'
+  import {findPageListApi,deletePageApi,findPageApi,releasePageApi} from '../../service/cms'
   import editorPage from './editorPage'
   import pageDetail from './pageDetail'
 
@@ -276,6 +277,7 @@
     },
     data() {
       return {
+        loading:true,
         flag: false, //false 增加 true修改
         addPageFlag: {
           visible: false,
@@ -392,6 +394,7 @@
         findPageListApi(this.copyParmas).then(res => {
           console.log("查询条件--》", this.copyParmas);
           console.log("查询分页", res);
+          this.loading=false;
           this.tablePageData = res.data.list;
           this.totalCount = res.data.total;
         }, err => {
@@ -480,8 +483,20 @@
         window.open('http://localhost:31001/cms/page/pagePreview/'+val);
       },
       //页面发布
-      releasePageBtn(){
-
+      releasePageBtn(val){
+        this.$confirm('确定发布该页面吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          releasePageApi(val).then(res=>{
+          if(res.success){
+            this.$message.success("发布成功！")
+          }else{
+            this.$message.error("发布失败！")
+          }
+          })
+        })
       },
       //点确定之后回调
       addSuccess(val) {
@@ -502,11 +517,11 @@
       //详情方法 id [String] 记录id
       pageDetail(val) {
         findPageApi(val).then(res=>{
-          if(res.success){
+          if(res){
             this.seePageDetail.visible=true;
-            this.seePageDetail.data={...res.data};
+            this.seePageDetail.data={...res};
           }else{
-            this.$message.error(res.message)
+            this.$message.error("查看详情失败！")
           }
         })
       },

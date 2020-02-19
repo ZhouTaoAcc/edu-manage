@@ -31,10 +31,10 @@
         </div>
         <div class="item">
           <el-form-item label="页面名称" prop="pageName">
-            <el-input v-model="pageForm.pageName"></el-input>
+            <el-input v-model="pageForm.pageName" placeholder="请输入页面名称"></el-input>
           </el-form-item>
           <el-form-item label="页面别名">
-            <el-input v-model="pageForm.pageAliase"></el-input>
+            <el-input v-model="pageForm.pageAliase" placeholder="请输入页面别名"></el-input>
           </el-form-item>
         </div>
         <div class="item">
@@ -42,7 +42,7 @@
             <el-input v-model="pageForm.pageStatus"></el-input>
           </el-form-item>
           <el-form-item label="访问地址" prop="pageWebPath">
-            <el-input v-model="pageForm.pageWebPath"></el-input>
+            <el-input v-model="pageForm.pageWebPath" placeholder="如:/include/"></el-input>
           </el-form-item>
         </div>
         <div class="item">
@@ -53,14 +53,14 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="静态文件ID" prop="htmlFileId">
-            <el-input v-model="pageForm.htmlFileId"></el-input>
+            <el-input v-model="pageForm.htmlFileId" disabled></el-input>
           </el-form-item>
         </div>
-        <el-form-item label="页面数据Url" prop="dataUrl">
-          <el-input v-model="pageForm.dataUrl"></el-input>
+        <el-form-item label="数据URL" prop="dataUrl">
+          <el-input v-model="pageForm.dataUrl" placeholder="如:http://localhost:31001/cms/config/getMode/id"></el-input>
         </el-form-item>
         <el-form-item label="物理路径" prop="pagePhysicalPath">
-          <el-input v-model="pageForm.pagePhysicalPath"></el-input>
+          <el-input v-model="pageForm.pagePhysicalPath" placeholder="如:F:/item/index/"></el-input>
         </el-form-item>
         <el-form-item label="创建时间">
           <el-date-picker
@@ -167,6 +167,10 @@
             {required: true, message: '请输入访问地址', trigger: 'blur'},
             {max: 255, message: '长度不要超过255个字符', trigger: 'blur'}
           ],
+          // dataUrl: [
+          //   {required: true, message: '请输入页面数据Url', trigger: 'blur'},
+          //   {max: 255, message: '长度不要超过255个字符', trigger: 'blur'}
+          // ],
           pagePhysicalPath: [
             {required: true, message: '请输入物理路径', trigger: 'blur'},
             {max: 255, message: '长度不要超过255个字符', trigger: 'blur'}

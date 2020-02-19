@@ -21,6 +21,19 @@
       /deep/ .el-form-item__content{
         width: 250px;
       }
+      &:nth-child(5){
+        width: 100%;
+        /deep/ .el-form-item__content{
+          width: 400px;
+        }
+      }
+      &:nth-child(6){
+        width: 100%;
+        /deep/ .el-form-item__content{
+          width: 400px;
+        }
+      }
+
     }
     /deep/ .el-form-item__error {
       color: #F56C6C;

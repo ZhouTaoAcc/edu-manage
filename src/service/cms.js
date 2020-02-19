@@ -43,6 +43,24 @@ export const updateTemplateApi=(id,params)=>{
 export const deleteTemplateApi=(id)=>{
   return Http.requestDelete(urlPre+'/cms/template/delete/'+id)
 };
+//4、站点管理
+//分页查询
+export const findSiteListApi =(params) =>{
+  let queryParams = QueryString.stringify(params);//将json对象转成key/value字符串
+  return Http.requestQuickGet(urlPre+'/cms/site/list/'+params.pageNo+'/'+params.pageSize+'?'+queryParams);
+};
+/*添加管理*/
+export const addSiteApi=(params)=>{
+  return Http.requestPost(urlPre+'/cms/site/add',params)
+};
+/*编辑管理 根据ID*/
+export const updateSiteApi=(id,params)=>{
+  return Http.requestPut(urlPre+'/cms/site/update/'+id,params)
+};
+/*删除管理*/
+export const deleteSiteApi=(id)=>{
+  return Http.requestDelete(urlPre+'/cms/site/delete/'+id)
+};
 
 /*对模板文件的处理 上传下载删除API*/
 
@@ -60,6 +78,6 @@ export const deleteTemplateFileApi=(id)=>{
 };
 
 //页面发布
-// export const previewPageApi=(id)=>{
-//   return Http.requestQuickGet(urlPre+'/cms/template/deleteTemplateFile'+'?id='+id)
-// };
+export const releasePageApi=(id)=>{
+  return Http.requestQuickGet(urlPre+'/cms/page/releasePage/'+id)
+};

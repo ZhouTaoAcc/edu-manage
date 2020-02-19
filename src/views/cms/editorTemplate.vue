@@ -172,7 +172,7 @@
       },
       formatUrl(val) {//对路径的操作
         if (val !== '') {
-          let url = val.replace(/\\/g, "\/");
+          let url = val.replace(/\\/g, "\/");//转成正斜杠
           return url;
         }
       },

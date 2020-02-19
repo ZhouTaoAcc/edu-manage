@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from '@/views/home/BaseHome'
 import pageList from '@/views/cms/pageListMange'
 import templateListManage from '../views/cms/templateListMange'
-
+import siteListMange from '../views/cms/siteListMange'
 
 
 Vue.use(Router);
@@ -38,11 +38,11 @@ export default new Router({
           meta: { title: '模板管理' }
         },
         {
-          path:'/page/list3',
-          name:'页面列表3',
-          component: pageList,
-          hidden:true,
-          meta: { title: '页面列表3' }
+          path:'/site/list',
+          name:'站点管理',
+          component: siteListMange,
+          hidden:false,
+          meta: { title: '站点管理' }
         },
         {
           path:'/page/list4',

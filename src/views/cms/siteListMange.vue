@@ -1,5 +1,5 @@
 <template>
-  <div class="edu-templateList-contain">
+  <div class="edu-siteList-contain">
     <!--面包屑行-->
     <div class="breadcrumb-operation">
       <el-breadcrumb separator="/" class="breadcrumb-inner">
@@ -8,80 +8,64 @@
         </el-breadcrumb-item>
       </el-breadcrumb>
       <span class="operation">
-         <span class="el-icon-circle-plus" @click="addTemplateBtn"> 添加模板</span>
+         <span class="el-icon-circle-plus" @click="addSiteBtn"> 添加站点</span>
       </span>
     </div>
     <!--查询部分-->
-    <div class="edu-templateList-top">
+    <div class="edu-siteList-top">
       <el-form
-        class="edu-templateList-ft"
+        class="edu-siteList-ft"
         label-position="right"
-        :model="searchTemplateParams"
-        ref="searchTemplateParams"
+        :model="searchSiteParams"
+        ref="searchSiteParams"
       >
-        <div class="edu-templateList-fdy">
-          <!--<el-form-item-->
-          <!--label="所属站点："-->
-          <!--class="edu-templateList-fiu"-->
-          <!--prop="siteId"-->
-          <!--&gt; -->
-          <!--<el-select v-model="searchTemplateParams.siteId" placeholder="请选择站点"-->
-          <!--clearable>   -->
-          <!--<el-option-->
-          <!--v-for="item in siteList"-->
-          <!--:key="item.siteId"-->
-          <!--:label="item.siteName"-->
-          <!--:value="item.siteId">    -->
-          <!--</el-option>-->
-          <!--  -->
-          <!--</el-select>-->
-          <!--</el-form-item>-->
+        <div class="edu-siteList-fdy">
           <el-form-item
-            label="模板ID："
-            class="edu-templateList-fiu"
+            label="站点名称："
+            class="edu-siteList-fiu"
+            prop="siteName"
+          >
+            <el-input
+              v-model="searchSiteParams.siteName"
+              placeholder="请输入站点名称"
+              :clearable="true"
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="站点域："
+            class="edu-siteList-fiu"
+            prop="siteDomain"
+          >
+            <el-input
+              v-model="searchSiteParams.siteDomain"
+              placeholder="请输入站点域"
+              :clearable="true"
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="访问地址："
+            class="edu-siteList-fiu"
             prop="siteId"
           >
             <el-input
-              v-model="searchTemplateParams.siteId"
-              placeholder="请输入站点ID"
-              :clearable="true"
-            ></el-input>
-          </el-form-item>
-          <el-form-item
-            label="模板名称："
-            class="edu-templateList-fiu"
-            prop="templateName"
-          >
-            <el-input
-              v-model="searchTemplateParams.templateName"
-              placeholder="请输入模板名称"
-              :clearable="true"
-            ></el-input>
-          </el-form-item>
-          <el-form-item
-            label="模板文件ID："
-            class="edu-templateList-fiu"
-            prop="templateFileId"
-          >
-            <el-input
-              v-model="searchTemplateParams.templateFileId"
-              placeholder="请输入模板文件ID"
+              v-model="searchSiteParams.siteWebPath"
+              placeholder="请输入访问地址"
               :clearable="true"
             ></el-input>
           </el-form-item>
         </div>
-        <div class="edu-templateList-fdy">
+        <div class="edu-siteList-fdy">
           <el-form-item
-            class="edu-templateList-fiu"
+            class="edu-siteList-fiu"
           >
           </el-form-item>
           <el-form-item
-            class="edu-templateList-fiu"
+            class="edu-siteList-fiu"
           >
           </el-form-item>
           <el-form-item
             label=" "
-            class="edu-templateList-fiu">
+            class="edu-siteList-fiu">
             <div class="btn-click">
               <el-button type="primary" @click="searchBtn">查询</el-button>
               <el-button @click="resetForm()">重置</el-button>
@@ -91,11 +75,11 @@
       </el-form>
     </div>
     <!--显示结果部分-->
-    <div class="edu-templateList-content">
-      <div class="edu-templateList-res">
-        <div class="edu-templateList-tab">
+    <div class="edu-siteList-content">
+      <div class="edu-siteList-res">
+        <div class="edu-siteList-tab">
           <el-table
-            :data="tableTemplateData"
+            :data="tableSiteData"
             stripe
             v-loading="this.loading"
           >
@@ -108,19 +92,9 @@
               :index='indexMethod'>
             </el-table-column>
             <el-table-column
-              prop="templateId"
-              label="模板ID"
-              min-width="200"
-              :show-overflow-tooltip="true"
-            >
-              <template slot-scope="scope">
-                {{scope.row.templateId||'--'}}
-              </template>
-            </el-table-column>
-            <el-table-column
               prop="siteId"
-              label="所属站点ID"
-              min-width="200"
+              label="站点ID"
+              min-width="220"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
@@ -128,53 +102,72 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="templateName"
-              label="模板名称"
-              min-width="150">
+              prop="siteName"
+              label="站点名称"
+              min-width="100"
+              :show-overflow-tooltip="true"
+            >
               <template slot-scope="scope">
-                {{scope.row.templateName||'--'}}
+                {{scope.row.siteName||'--'}}
               </template>
             </el-table-column>
             <el-table-column
-              prop="templateParameter"
-              label="模板参数"
+              prop="siteDomain"
+              label="站点域名"
+              min-width="150">
+              <template slot-scope="scope">
+                {{scope.row.siteDomain||'--'}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="sitePort"
+              label="端口号"
+              min-width="100"
+              align="center"
+              :show-overflow-tooltip="true"
+            >
+              <template slot-scope="scope">
+                {{scope.row.sitePort||'--'}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="siteWebPath"
+              label="访问地址"
+              min-width="100"
+              :show-overflow-tooltip="true"
+            >
+              <template slot-scope="scope">
+                {{scope.row.siteWebPath||'--'}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="siteCreateTime"
+              label="创建时间"
               min-width="150"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
-                {{scope.row.templateParameter||'--'}}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="templateFileId"
-              label="模板文件ID"
-              min-width="250"
-              :show-overflow-tooltip="true"
-            >
-              <template slot-scope="scope">
-                {{scope.row.templateFileId||'--'}}
+                {{scope.row.siteCreateTime| formatDateTime}}
               </template>
             </el-table-column>
             <el-table-column
               label="操作"
-              width="200"
+              width="150"
               align="center"
               fixed="right">
               <template slot-scope="scope">
-                <span class="el-icon-download tab-btn"
-                      @click.stop="exportTemplateBtn(scope.row.templateFileId)">导出文件</span>
-                <span class="el-icon-edit-outline tab-btn" @click.stop="updateTemplateBtn(scope.row)">编辑</span>
-                <span class="el-icon-delete tab-btn" @click.stop="deleteTemplateBtn(scope.row.templateId)">删除</span>
+                <span class="el-icon-edit-outline tab-btn" @click.stop="updateSiteBtn(scope.row)">编辑</span>
+                <span class="el-icon-delete tab-btn" @click.stop="deleteSiteBtn(scope.row.siteId)">删除</span>
               </template>
             </el-table-column>
           </el-table>
         </div>
-        <div class="edu-templateList-pag">
-          <div class="edu-templateList-pag-content">
+        <div class="edu-siteList-pag">
+          <div class="edu-siteList-pag-content">
             <el-pagination
-              :current-page="searchTemplateParams.pageNo+1"
+              :current-page="searchSiteParams.pageNo+1"
               :page-sizes="[10,20,50,100]"
-              :page-size="searchTemplateParams.pageSize"
+              :page-size="searchSiteParams.pageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="totalCount"
               @current-change="handleCurrentChange"
@@ -185,47 +178,47 @@
       </div>
     </div>
     <!--自定义组件 用于添加 修改-->
-    <editor-template
+    <editor-site
       :flag="flag"
-      :editorFlag.sync="!flag ? addTemplateFlag: updateTemplateFlag"
+      :editorFlag.sync="!flag ? addSiteFlag: updateSiteFlag"
       @addModel="addSuccess"
       @closeModel="closeSuccess">
-    </editor-template>
+    </editor-site>
   </div>
 </template>
 
 <script>
   import {
-    findTemplateListApi,
-    deleteTemplateApi,
-    readTemplateFileApi,
+    findSiteListApi,
+    deleteSiteApi,
   } from '../../service/cms'
-  import editorTemplate from './editorTemplate'
+  import moment from 'moment'
+  import editorSite from './editorSite'
 
 
   export default {
     components: {
-      editorTemplate
+      editorSite
     },
     data() {
       return {
         loading:true,
         flag: false, //false 增加 true修改
-        addTemplateFlag: {
+        addSiteFlag: {
           visible: false,
-          title: '添加模板',
+          title: '添加站点',
           data: {}
         },
-        updateTemplateFlag: {
+        updateSiteFlag: {
           visible: false,
-          title: '编辑模板',
+          title: '编辑站点',
           data: {}
         },
         //分页搜索参数
-        searchTemplateParams: {
-          siteId: '',
-          templateName: '',
-          templateFileId: '', //模板文件ID
+        searchSiteParams: {
+          siteName: '',
+          siteDomain: '', //站点域
+          siteWebPath: '',
           pageNo: 0, //页码
           pageSize: 10 //每页几条
         },
@@ -241,7 +234,7 @@
         ],
         copyParmas: {}, //查询使用的参数
         totalCount: null,	//总个数
-        tableTemplateData: [],	//列表中的值
+        tableSiteData: [],	//列表中的值
         levelList: null,
 
       };
@@ -253,11 +246,15 @@
     },
     computed: {},
     mounted() {
-      this.copyParmas = {...this.searchTemplateParams};
+      this.copyParmas = {...this.searchSiteParams};
       this.showListInfo();
       this.getBreadcrumb();
     },
-    filters: {},
+    filters: {
+      formatDateTime(val){
+        return moment(val).format('YYYY-MM-DD HH:mm:ss');
+      }
+    },
     methods: {
       //生成面包屑
       getBreadcrumb() {
@@ -270,11 +267,11 @@
       },
       //查询分页内容
       showListInfo() {
-        findTemplateListApi(this.copyParmas).then(res => {
-          this.loading=false;
+        findSiteListApi(this.copyParmas).then(res => {
           console.log("查询条件--》", this.copyParmas);
-          console.log("查询分页", res);
-          this.tableTemplateData = res.data.list;
+          console.log("查询结果", res);
+          this.loading=false;
+          this.tableSiteData = res.data.list;
           this.totalCount = res.data.total;
         }, err => {
           this.$message.warning(err);
@@ -282,68 +279,49 @@
       },
       //查询按钮
       searchBtn() {
-        this.searchTemplateParams.pageNo = 0;
-        this.copyParmas = {...this.searchTemplateParams};
+        this.searchSiteParams.pageNo = 0;
+        this.copyParmas = {...this.searchSiteParams};
         this.showListInfo();
       },
       //序号按页码递增 index [Number] 每条数据前的序号
       indexMethod(index) {
-        return this.searchTemplateParams.pageNo * this.searchTemplateParams.pageSize + index + 1;
+        return this.searchSiteParams.pageNo * this.searchSiteParams.pageSize + index + 1;
       },
       //页码切换方法 val [Number] 切换到的页码
       handleCurrentChange(val) {
-        this.searchTemplateParams.pageNo = val - 1;
+        this.searchSiteParams.pageNo = val - 1;
         this.copyParmas.pageNo = val - 1;
         this.showListInfo();
       },
       //每页数量切换方法 val [Number] 切换到的每页数量
       handleSizeChange(val) {
-        this.searchTemplateParams.pageSize = val;
-        this.searchTemplateParams.pageNo = 0;
+        this.searchSiteParams.pageSize = val;
+        this.searchSiteParams.pageNo = 0;
         this.copyParmas.pageSize = val;
         this.copyParmas.pageNo = 0;
         this.showListInfo();
       },
-      addTemplateBtn() {
+      addSiteBtn() {
         this.flag = false;
-        this.addTemplateFlag.visible = true;
-      },
-      //导出模板文件
-      exportTemplateBtn(val) {
-        if (val) {
-          this.$alert('将文件导出到桌面！', '温馨提示', {
-            confirmButtonText: '确定',
-            callback: (action) => {
-              if (action === "confirm") {
-                readTemplateFileApi(val, 1).then(res => {//第二个参数为1 表示下载文件
-                  if (res.success) {
-                    this.$message.success(res.message);
-                  } else {
-                    this.$message.error(res.message);
-                  }
-                })
-              }
-            }
-          })
-        }
+        this.addSiteFlag.visible = true;
       },
       //编辑
-      updateTemplateBtn(val) {
+      updateSiteBtn(val) {
         if (val) {
           this.flag = true;
-          this.updateTemplateFlag.visible = true;
+          this.updateSiteFlag.visible = true;
           console.log('编辑', val);
-          this.updateTemplateFlag.data = val; //传值给子组件
+          this.updateSiteFlag.data = val; //传值给子组件
         }
       },
       //删除
-      deleteTemplateBtn(val) {
+      deleteSiteBtn(val) {
         this.$confirm('确定删除该记录吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteTemplateApi(val).then(res => {
+          deleteSiteApi(val).then(res => {
             if (res.success) {
               this.$message.success("删除成功！");
               this.showListInfo();
@@ -357,30 +335,30 @@
       addSuccess(val) {
         if (val) {
           this.flag = false;
-          this.addTemplateFlag.visible = false;
-          this.updateTemplateFlag.visible = false;
+          this.addSiteFlag.visible = false;
+          this.updateSiteFlag.visible = false;
           this.showListInfo();
         }
       },
       //点关闭之后回调
       closeSuccess() {
         this.flag = false;
-        this.addTemplateFlag.visible = false;
-        this.updateTemplateFlag.visible = false;
+        this.addSiteFlag.visible = false;
+        this.updateSiteFlag.visible = false;
       },
       //重置按钮 formName [Object] 表单数据
       resetForm() {
-        for (let k in this.searchTemplateParams) {
-          this.searchTemplateParams[k] = '';
+        for (let k in this.searchSiteParams) {
+          this.searchSiteParams[k] = '';
         }
-        this.searchTemplateParams.pageNo = 0;
-        this.searchTemplateParams.pageSize = 10;
-        this.copyParmas = {...this.searchTemplateParams};
+        this.searchSiteParams.pageNo = 0;
+        this.searchSiteParams.pageSize = 10;
+        this.copyParmas = {...this.searchSiteParams};
         this.showListInfo();
       }
     }
   };
 </script>
 <style scoped lang="scss">
-  @import "../../styles/cms/templateListMange";
+  @import "../../styles/cms/siteListMange";
 </style>
