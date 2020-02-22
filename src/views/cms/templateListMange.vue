@@ -98,6 +98,7 @@
             :data="tableTemplateData"
             stripe
             v-loading="this.loading"
+            element-loading-text="拼命加载中..."
           >
             <el-table-column
               prop="id"
@@ -242,7 +243,7 @@
         copyParmas: {}, //查询使用的参数
         totalCount: null,	//总个数
         tableTemplateData: [],	//列表中的值
-        levelList: null,
+        levelList: null
 
       };
     },
@@ -264,7 +265,7 @@
         let matched = this.$route.matched.filter(item => item.name);
         const first = matched[0];
         if (first && first.name !== '') {
-          matched = [{path: '/', meta: {title: 'CMS页面管理'}}].concat(matched)
+          matched = [{path: '/cms', meta: {title: 'CMS页面管理'}}].concat(matched)
         }
         this.levelList = matched;
       },

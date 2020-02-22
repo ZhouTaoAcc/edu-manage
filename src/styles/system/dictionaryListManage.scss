@@ -1,0 +1,162 @@
+/*选择器嵌套格式*/
+.edu-dictionaryList-contain {
+  //padding: 16px;
+  background: rgb(240, 242, 245);
+  height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  .breadcrumb-operation {
+    background: #fff;
+    height: 30px;
+    padding-top: 10px;
+    box-shadow: 0 0 10px 0 rgba(128, 145, 165, 0.2);
+    margin-bottom: 0.8rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between; /*充满一行 左右分布*/
+    .el-breadcrumb {
+      padding-left: 20px;
+    }
+    .operation {
+      color: #909399;
+      padding-right: 20px;
+      &:hover {
+        cursor: pointer;
+        color: rgba(47, 144, 255, 1);
+      }
+    }
+  }
+  .edu-dictionaryList-top { //查询部分
+    background: #FFF;
+    height: 150px;
+    box-sizing: border-box;
+    padding: 10px 20px 10px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    box-shadow: 0 0 10px 0 rgba(128, 145, 165, 0.2);
+    .edu-dictionaryList-ft {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      .edu-dictionaryList-fdy {
+        margin-bottom: 17px;
+        //&:nth-last-child(n + 2) {
+        //  margin-bottom: 12px;
+        //}
+        .edu-dictionaryList-fiu {
+          width: 33%;
+          margin-bottom: 0;
+          display: inline-flex;
+          /deep/ .el-form-item__label {
+            width: 100px;
+            text-align: right;
+            vertical-align: middle;
+            float: left;
+            font-size: 14px;
+            color: #606266;
+            line-height: 40px;
+            padding: 0 12px 0 0;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+          }
+          /deep/ .el-form-item__content {
+            line-height: 40px;
+            position: relative;
+            font-size: 14px;
+            width: 300px;
+          }
+          .el-input__inner {
+            height: 40px;
+          }
+          .el-date-editor {
+            width: 100%;
+          }
+          /deep/ .btn-click {
+            text-align: right;
+            height: 40px;
+            .el-button {
+              height: 35px;
+              text-align: center;
+            }
+          }
+          .el-range-editor.el-input__inner {
+            width: 100%;
+          }
+          /deep/ .el-select .el-input {
+            width: 300px;
+          }
+        }
+      }
+
+    }
+  }
+  .edu-dictionaryList-content { //显示结果部分
+    background: #FFF;
+    height: 352px; //中间区域box高度
+    box-sizing: border-box;
+    padding: 16px;
+    border-radius: 4px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px 0 rgba(128, 145, 165, 0.2);
+    .edu-dictionaryList-res {
+      flex: 1;
+      .edu-dictionaryList-tab {
+        max-height: calc(100% - 65px); //表格充满中间区域
+        display: flex;
+        flex-direction: column;
+        .el-table th, .el-table tr {
+          height: 57px;
+        }
+        th {
+          color: rgba(51, 51, 51, 1);
+          font-size: 14px;
+          background-color: #ccc;
+          &:nth-child(7) {
+            text-align: right;
+            padding-right: 40px;
+          }
+        }
+        td {
+          &:nth-child(7) {
+            text-align: right;
+            padding-right: 40px;
+          }
+        }
+        .el-form-item__label {
+          white-space: nowrap;
+          color: rgba(51, 51, 51, 1);
+          font-size: 14px;
+        }
+        .tab-btn {
+          margin-right: 0.25rem;
+          color: #427BF1;
+          &:last-child {
+            margin-right: 0;
+          }
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+      .edu-dictionaryList-pag {
+        height: 40px;
+        vertical-align: center;
+        .edu-dictionaryList-pag-content {
+          margin: 20px 24px;
+          text-align: right;
+          align-items: center;
+        }
+      }
+    }
+  }
+}
+
+

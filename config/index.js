@@ -13,10 +13,22 @@ module.exports = {
    //vue-cli提供的解决跨域问题的方法 依赖于node.js 用服务端代理解决浏览器跨域
     proxyTable: {
       '/api/cms': {
-        target: 'http://localhost:31001',
+        target: 'http://localhost:31001',  //cms页面管理服务
         pathRewrite: {
           '^/api': ''//实际请求去掉/api
-        }
+        },
+      },
+      '/api/system': {
+        target: 'http://localhost:31001',  //系统管理服务
+        pathRewrite: {
+          '^/api': ''//实际请求去掉/api
+        },
+      },
+      '/api/course': {
+        target: 'http://localhost:31002', //课程管理服务
+        pathRewrite: {
+          '^/api': ''//实际请求去掉/api
+        },
       }
     },
     // Various Dev Server settings

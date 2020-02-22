@@ -82,6 +82,7 @@
             :data="tableSiteData"
             stripe
             v-loading="this.loading"
+            element-loading-text="拼命加载中..."
           >
             <el-table-column
               prop="id"

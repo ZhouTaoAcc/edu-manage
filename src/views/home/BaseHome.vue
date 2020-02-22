@@ -10,7 +10,8 @@
         <el-aside :class="isCollapse?'menu-collapsed':'menu-expanded'" style="width: auto !important;">
           <!--导航菜单-->
           <div class="CollapseBtn">
-            <span v-if="isCollapse" @click="collapse"> <img src="/static/images/right-open.png" width="20px" alt=""></span>
+            <span v-if="isCollapse" @click="collapse"> <img src="/static/images/right-open.png" width="20px"
+                                                            alt=""></span>
             <span v-else @click="collapse"> <img src="/static/images/folder.png" width="20px" alt=""></span>
           </div>
           <el-menu :default-active="$router.path"
@@ -24,23 +25,30 @@
                    @close="handleClose"
                    :collapse="isCollapse">
             <template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-              <el-submenu :index="index+''">
+              <el-submenu :index="index.toString()" v-if="item.children!==''||item.children!=null">
                 <template slot="title"><i :class="item.icon"></i><span slot="title">{{item.name}}</span></template>
-                <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">
+                <el-menu-item v-for="child in item.children"
+                              :index="item.path+'/'+child.path"
+                              :key="child.path"
+                              v-if="!child.hidden"><!--item.path+'/'+child.path 这里父路径+子路径 实现跳转-->
                   {{child.name}}
                 </el-menu-item>
               </el-submenu>
+              <el-menu-item v-else :index="index+''">
+                <template slot="title"><i :class="item.icon"></i><span slot="title">{{item.name}}</span></template>
+              </el-menu-item>
             </template>
           </el-menu>
         </el-aside>
         <!--内容区域-->
         <el-container>
-          <el-main><!--所有子页面显示在此处-->
+          <el-main><!--所有子页面显示在此处 路由锚点-->
             <div class="grid-content bg-purple-light">
               <el-col :span="24" class="content-wrapper">
                 <transition name="fade" mode="out-in">
                   <router-view></router-view>
                 </transition>
+                <!--<router-view></router-view>-->
               </el-col>
             </div>
           </el-main>
@@ -98,7 +106,6 @@
       showMenu(i, status) {
         this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-' + i)[0].style.display = status ? 'block' : 'none';
       }
-
     },
     created() {
       console.log(this.$router.options.routes);

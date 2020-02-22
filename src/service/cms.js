@@ -1,4 +1,4 @@
-/*CMS公共服务API*/
+/*CMS页面管理服务API*/
 import Http from './ajax/index';
 let sysUrlConfig = require('../../static/config/baseUrl.js');//读取配置文件
 const QueryString = require("querystring");

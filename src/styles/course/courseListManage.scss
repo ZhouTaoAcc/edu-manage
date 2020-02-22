@@ -1,0 +1,150 @@
+.edu-courseManageList-contain {
+  background: rgb(240, 242, 245);
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  /*面包屑*/
+  .breadcrumb-operation {
+    background: #fff;
+    height: 30px;
+    padding-top: 10px;
+    box-shadow: 0 0 10px 0 rgba(128, 145, 165, 0.2);
+    margin-bottom: 0.8rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between; /*充满一行 左右分布*/
+    .el-breadcrumb {
+      padding-left: 20px;
+    }
+  }
+  /*搜索区域*/
+  .edu-courseManageList-top {
+    background: #FFF;
+    height: 150px;
+    box-sizing: border-box;
+    padding: 10px 20px 10px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    box-shadow: 0 0 10px 0 rgba(128, 145, 165, 0.2);
+    //搜索form
+    .edu-courseManageList-ft {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      .edu-courseManageList-fdy {
+        &:nth-last-child(n + 2) {
+          margin-bottom: 12px;
+        }
+        .edu-courseManageList-fiu {
+          width: 33%;
+          margin-bottom: 0;
+          display: inline-flex; /*使el-form-item__label 和.el-form-item__content保持在一行*/
+          /deep/ .el-form-item__label {
+            width: 100px;
+            text-align: right;
+            vertical-align: middle;
+            float: left;
+            font-size: 14px;
+            color: #606266;
+            line-height: 40px;
+            padding: 0 12px 0 0;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+          }
+          /deep/ .el-form-item__content {
+            line-height: 40px;
+            position: relative;
+            font-size: 14px;
+            width: 300px;
+          }
+          .el-input__inner {
+            height: 40px;
+          }
+          .el-date-editor {
+            width: 100%;
+          }
+          /deep/ .btn-click {
+            text-align: right;
+            height: 40px;
+            .el-button {
+              height: 35px;
+              text-align: center;
+            }
+          }
+          .el-range-editor.el-input__inner {
+            width: 100%;
+          }
+          /deep/ .el-select .el-input {
+            width: 300px;
+          }
+        }
+      }
+
+    }
+  }
+  .edu-courseManageList-center {
+    background: #FFF;
+    height: 352px; //中间区域box高度
+    box-sizing: border-box;
+    padding: 16px;
+    border-radius: 4px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px 0 rgba(128, 145, 165, 0.2);
+    .edu-courseManageList-content {
+      /deep/ .el-card {
+        margin: 10px;
+        height: 250px;
+        &:hover{
+         background:#dddddd;
+        }
+      }
+      .time {
+        font-size: 13px;
+        color: #999;
+      }
+
+      .bottom {
+        margin-top: 20px;
+        line-height: 20px;
+      }
+
+      .button {
+        margin-top: 10px;
+        padding: 0;
+        float: right;
+      }
+
+      .image {
+        width: 100%;
+        height: 100px;
+        display: block;
+      }
+
+      .clearfix:before,
+      .clearfix:after {
+        display: table;
+        content: "";
+      }
+
+      .clearfix:after {
+        clear: both
+      }
+    }
+    .edu-courseManageList-page {
+      height: 40px;
+      vertical-align: center;
+      .edu-templateList-pag-content {
+        margin: 20px 24px;
+        text-align: right;
+        align-items: center;
+      }
+    }
+  }
+}
