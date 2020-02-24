@@ -14,6 +14,10 @@ export const findDictionaryListApi =(params) =>{
 export const addDictionaryApi=(params)=>{
   return Http.requestPost(urlPre+'/system/dictionary/add',params)
 };
+/*添加字典项*/
+export const addDictionaryItemApi=(type,params)=>{
+  return Http.requestPost(urlPre+'/system/dictionary/addItem/'+type,params)
+};
 /*编辑字典 根据ID*/
 export const updateDictionaryApi=(type,id,params)=>{
   return Http.requestPut(urlPre+'/system/dictionary/update/'+type+'/'+id,params)
@@ -22,8 +26,17 @@ export const updateDictionaryApi=(type,id,params)=>{
 export const deleteDictionaryApi=(id)=>{
   return Http.requestQuickGet(urlPre+'/system/dictionary/deleteById/'+id)
 };
+/*删除字典项 通过Type id*/
+export const deleteDictionaryItemApi=(type,id)=>{
+  return Http.requestQuickGet(urlPre+'/system/dictionary/deleteItem/'+type+'/'+id)
+};
+
 /*设置字典状态 通过Type*/
 export const setDictionaryStatusApi=(type,id,status)=>{
   return Http.requestQuickGet(urlPre+'/system/dictionary/setStatusByType/'+type+'/'+id+'?status='+status)
 };
 
+/*查询字典 通过Type*/
+export const findDictionaryApi=(type)=>{
+  return Http.requestQuickGet(urlPre+'/system/dictionary/findByType/'+type)
+};

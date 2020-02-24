@@ -103,7 +103,7 @@
             </el-table-column>
             <el-table-column
               label="操作"
-              width="150"
+              width="200"
               align="center"
               fixed="right"
               class="child-background">
@@ -114,6 +114,10 @@
                       @click.stop="setStatus(scope.row,1)">启用</span>
                 <span v-if="!scope.row.dtype" class="el-icon-edit-outline tab-btn"
                       @click.stop="updateDictionaryBtn(scope.row)">编辑</span>
+                <span v-if="!scope.row.dtype" class="el-icon-delete tab-btn"
+                      @click.stop="deleteDictionaryItemBtn(scope.row)">删除</span>
+                <span v-if="scope.row.dtype"  class="el-icon-circle-plus-outline tab-btn" slot="reference"
+                      @click.stop="addDictionaryItemBtn(scope.row)">添加</span>
                 <span v-if="scope.row.dtype" class="el-icon-delete tab-btn"
                       @click.stop="deleteDictionaryBtn(scope.row.id)">删除</span>
               </template>
@@ -142,16 +146,30 @@
       @addModel="addSuccess"
       @closeModel="closeSuccess">
     </editor-Dictionary>
+
+    <!--自定义popover组件 用于添加字典项-->
+    <add-dictionary-item
+      :popoverFlag.sync="popoverFlag"
+      @addModel="addSuccess"
+      @closeModel="closeSuccess">
+    </add-dictionary-item>
   </div>
 </template>
 
 <script>
-  import {findDictionaryListApi, setDictionaryStatusApi,deleteDictionaryApi} from '../../service/system'
+  import {
+    findDictionaryListApi,
+    deleteDictionaryItemApi,
+    setDictionaryStatusApi,
+    deleteDictionaryApi
+  } from '../../service/system'
   import editorDictionary from './editorDictionary'
+  import addDictionaryItem from './addDictionaryItem'
 
   export default {
     components: {
-      editorDictionary
+      editorDictionary,
+      addDictionaryItem
     },
     data() {
       return {
@@ -165,6 +183,11 @@
         updateDictionaryFlag: {
           visible: false,
           title: '编辑字典',
+          data: {}
+        },
+        popoverFlag:{//添加字典项
+          title: '添加字典项',
+          visible: false,
           data: {}
         },
         //分页搜索参数
@@ -238,7 +261,7 @@
       },
       //根据子节点的id设置状态
       setStatus(val, status) {
-        console.log(val.sdType , val.id)
+        console.log(val.sdType, val.id)
         if (val.sdType && val.id) {
           setDictionaryStatusApi(val.sdType, val.id, status).then(res => {
             if (res.success) {
@@ -249,17 +272,35 @@
             }
           });
 
-        }else {
+        } else {
           this.$message.error("参数不合法！")
         }
       },
-      deleteDictionaryBtn(val){
-        this.$confirm('确定删除该记录吗?', '提示', {
+      //删除整个字典
+      deleteDictionaryBtn(val) {
+        this.$confirm('确定删除该字典吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           deleteDictionaryApi(val).then(res => {
+            if (res.success) {
+              this.$message.success("删除成功！");
+              this.showListInfo();
+            } else {
+              this.$message.error(res.message)
+            }
+          })
+        })
+      },
+      //删除字典项
+      deleteDictionaryItemBtn(val) {
+        this.$confirm('确定删除该字典项吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteDictionaryItemApi(val.sdType, val.id).then(res => {
             if (res.success) {
               this.$message.success("删除成功！");
               this.showListInfo();
@@ -295,12 +336,20 @@
           this.updateDictionaryFlag.data = val; //传值给子组件
         }
       },
+      addDictionaryItemBtn(val){
+        console.log(val)
+        if (val) {
+          this.popoverFlag.visible = true;
+          this.popoverFlag.data = val; //传值给子组件
+        }
+      },
       //点确定之后回调
       addSuccess(val) {
         if (val) {
           this.flag = false;
           this.addDictionaryFlag.visible = false;
           this.updateDictionaryFlag.visible = false;
+          this.popoverFlag.visible=false;
           this.showListInfo();
         }
       },
@@ -308,6 +357,7 @@
       closeSuccess() {
         this.addDictionaryFlag.visible = false;
         this.updateDictionaryFlag.visible = false;
+        this.popoverFlag.visible=false;
       },
       //重置按钮 formName [Object] 表单数据
       resetForm() {

@@ -10,7 +10,7 @@
         <el-form-item label="字典名称" prop="dName" v-if="!flag">
           <el-input v-model="dictionaryForm.dName" placeholder="请输入字典名称"></el-input>
         </el-form-item>
-        <el-form-item label="类型值" prop="dType" v-if="!flag">
+        <el-form-item label="类型值" prop="dType" v-if="!flag" required>
           <el-input v-model="dictionaryForm.dType" placeholder="请输入类型值"
                     oninput="value=value.replace(/[^\d]/g,'')"></el-input>
         </el-form-item>
@@ -106,7 +106,6 @@
           .catch(_ => {
           });
         this.saveLoading = false;
-        this.$refs['dictionaryForm'].resetFields();
       },
       init() {//初始化
         for (let k in this.dictionaryForm) {
@@ -152,6 +151,7 @@
             this.$emit('addModel', true);
             this.$refs['dictionaryForm'].resetFields();
           } else {
+            this.saveLoading = false;
             this.$message.error(res.message)
           }
         })
@@ -167,6 +167,7 @@
             this.saveLoading = false;
             this.$refs['dictionaryForm'].resetFields();
           } else {
+            this.saveLoading = false;
             this.$message.error(res.message);
           }
         })

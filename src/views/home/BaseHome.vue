@@ -34,9 +34,6 @@
                   {{child.name}}
                 </el-menu-item>
               </el-submenu>
-              <el-menu-item v-else :index="index+''">
-                <template slot="title"><i :class="item.icon"></i><span slot="title">{{item.name}}</span></template>
-              </el-menu-item>
             </template>
           </el-menu>
         </el-aside>

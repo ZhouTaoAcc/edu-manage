@@ -73,7 +73,7 @@
     </div>
     <div class="edu-courseManageList-center">
       <div class="edu-courseManageList-content">
-        <el-row>
+        <el-row v-loading="loading">
           <el-col :span="4" >
             <el-card :body-style="{ padding: '5px' }">
               <img src="/static/images/add.jpg" class="image">
@@ -127,6 +127,7 @@
     data() {
       return {
         currentDate: new Date(),
+        loading:true,
         searchCourseParams: {
           name: '',
           status: '',
@@ -163,11 +164,11 @@
       //查询分页内容
       showListInfo() {
         findCourseListApi(this.copyParmas).then(res => {
-          // this.loading = false;
           console.log("查询条件--》", this.copyParmas);
           console.log("查询分页", res);
           this.cardData = res.data.list;
           this.totalCount = res.data.total;
+          this.loading=false;
         }, err => {
           this.$message.warning(err);
         });

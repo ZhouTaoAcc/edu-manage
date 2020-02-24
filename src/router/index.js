@@ -6,13 +6,20 @@ import pageList from '../views/cms/pageListMange'
 import templateListManage from '../views/cms/templateListMange'
 import siteListMange from '../views/cms/siteListMange'
 //系统管理模块
-import dictionaryListMange from  '../views/system/dictionaryListMange'
+import dictionaryListMange from '../views/system/dictionaryListMange'
 
-//课程模块
-import courseManageList from  '../views/course/courseListManage'
-import courseSetting from  '../views/course/courseSetting'
-import courseBaseAdd from  '../views/course/courseBaseAdd'
-
+//课程管理模块
+import courseManageList from '../views/course/courseListManage'
+import courseSetting from '../views/course/courseSetting'
+import courseBaseAdd from '../views/course/courseBaseAdd'
+//课程管理->课程设置
+import courseIndex from '../views/course/components/courseIndex' //课程主页
+import courseBaseInfo from '../views/course/components/courseBaseInfo'//基本信息
+import coursePicture from '../views/course/components/coursePicture'//课程图片
+import coursePlan from '../views/course/components/coursePlan'//课程计划
+import courseMarketInfo from '../views/course/components/courseMarketInfo'//营销信息
+import courseTeacher from '../views/course/components/courseTeacher'//教师信息
+import coursePublish from '../views/course/components/coursePublish'//课程发布
 
 Vue.use(Router);
 
@@ -75,10 +82,54 @@ export default new Router({
           name: '课程设置',
           component: courseSetting,
           hidden: true,
-          meta: {title: '课程设置'}
+          meta: {title: '课程设置'},
+          children: [
+            {
+              path: '/courseManage/setting/courseIndex/:courseid',
+              name: '课程首页',
+              component: courseIndex,
+              hidden: false
+            },
+            {
+              path: '/courseManage/setting/baseInfo/:courseid',
+              name: '基本信息',
+              component: courseBaseInfo,
+              hidden: false
+            },
+            {
+              path: '/courseManage/setting/picture/:courseid',
+              name: '课程图片',
+              component: coursePicture,
+              hidden: false
+            },
+            {
+              path: '/courseManage/setting/marketInfo/:courseid',
+              name: '营销信息',
+              component: courseMarketInfo,
+              hidden: false
+            },
+            {
+              path: '/courseManage/setting/plan/:courseid',
+              name: '课程计划',
+              component: coursePlan,
+              hidden: false
+            },
+            {
+              path: '/courseManage/setting/teacher/:courseid',
+              name: '教师信息',
+              component: courseTeacher,
+              hidden: false
+            },
+            {
+              path: '/courseManage/setting/publish/:courseid',
+              name: '发布课程',
+              component: coursePublish,
+              hidden: false
+            }
+          ]
         },
         {
-          path:'courseBase/add',
+          path: 'courseBase/add',
           name: '新增课程',
           component: courseBaseAdd,
           hidden: false,
@@ -89,7 +140,7 @@ export default new Router({
     {
       path: '/mediaManage',
       name: '媒资管理',
-      icon: 'el-icon-notebook-1',
+      icon: 'el-icon-video-camera',
       component: Home,
       hidden: false,
       meta: {requiresAuth: true},
@@ -112,7 +163,7 @@ export default new Router({
     {
       path: '/system',
       name: '系统管理',
-      icon: 'el-icon-notebook-1',
+      icon: 'el-icon-setting',
       component: Home,
       hidden: false,
       meta: {requiresAuth: true},

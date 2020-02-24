@@ -1,0 +1,62 @@
+.courseBaseAdd {
+  background: rgb(240, 242, 245);
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  /*面包屑*/
+  .breadcrumb-operation {
+    background: #fff;
+    height: 30px;
+    padding-top: 10px;
+    box-shadow: 0 0 10px 0 rgba(128, 145, 165, 0.2);
+    margin-bottom: 0.8rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between; /*充满一行 左右分布*/
+    .el-breadcrumb {
+      padding-left: 20px;
+    }
+  }
+  /*表单*/
+  .content {
+    background: #FFF;
+    box-sizing: border-box;
+    padding: 16px;
+    border-radius: 4px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px 0 rgba(128, 145, 165, 0.2);
+    min-height: 528px;
+    max-height: 528px;
+    overflow-y: auto;
+    position: relative;
+    .el-form {
+      display: flex;
+      flex-direction: column;
+      .el-form-item {
+        width: 500px;
+        margin-left: 420px;
+        /deep/ .el-form-item__content {
+          width: 400px;
+        }
+        /deep/ .el-cascader .el-input .el-input__inner {
+          text-overflow: ellipsis;
+          width: 400px;
+        }
+        /deep/ .el-textarea__inner {
+          max-height: 80px;
+        }
+      }
+    }
+    .dialog-footer {
+      margin-left: 600px;
+      .el-button {
+        margin-right: 30px;
+      }
+    }
+  }
+
+}
