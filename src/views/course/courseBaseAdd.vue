@@ -12,7 +12,7 @@
     <div class="content">
       <el-form :model="courseAddForm" label-width="80px" :rules="courseRules" ref="courseAddForm">
         <el-form-item label="课程名称" prop="name">
-          <el-input v-model="courseAddForm.name" auto-complete="off"></el-input>
+          <el-input v-model="courseAddForm.name" auto-complete="on"></el-input>
         </el-form-item>
         <el-form-item label="适用人群" prop="users">
           <el-input type="textarea" v-model="courseAddForm.users" auto-complete="off"></el-input>
@@ -26,23 +26,29 @@
           </el-cascader>
         </el-form-item>
         <el-form-item label="课程等级" prop="grade">
-          <b v-for="grade in gradeList">
-            <el-radio v-model="courseAddForm.grade" :label="grade.sdId">{{grade.sdName}}</el-radio>&nbsp;&nbsp;
-          </b>
+          <span v-for="grade in gradeList">
+            <el-radio v-model="courseAddForm.grade"
+                      :label="grade.id"
+                      v-if="grade.sdStatus==='1'">
+              {{grade.sdName}}
+            </el-radio>&nbsp;&nbsp;
+          </span>
         </el-form-item>
         <el-form-item label="学习模式" prop="studymodel">
-          <b v-for="studymodel_v in studymodelList">
-            <el-radio v-model="courseAddForm.studymodel" :label="studymodel_v.sdId">{{studymodel_v.sdName}}</el-radio>&nbsp;&nbsp;
-          </b>
-
+          <span v-for="model in studymodelList">
+            <el-radio v-model="courseAddForm.studymodel"
+                      :label="model.id"
+                      v-if="model.sdStatus==='1'">
+              {{model.sdName}}
+            </el-radio>&nbsp;&nbsp;
+          </span>
         </el-form-item>
-
         <el-form-item label="课程介绍" prop="description">
           <el-input type="textarea" v-model="courseAddForm.description"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button  @click.native="clear()">清空</el-button>
+        <el-button @click.native="clear()">清空</el-button>
         <el-button type="primary" @click.native="save()">提交</el-button>
       </div>
     </div>
@@ -110,20 +116,21 @@
         //处理课程分类
         this.courseAddForm.mt = this.categoryActive[0];//大分类
         this.courseAddForm.st = this.categoryActive[1];//小分类
+        console.log('添加参数', this.courseAddForm);
         addCourseBaseApi(this.courseAddForm).then(res => {
           if (res.success) {
-            this.$message.success("提交成功")
+            this.$message.success(res.message);
             //跳转到我的课程
-            this.$router.push({path: '/course/list'})
+            this.$router.push({path: '/courseManage/myCourse/list'})
           } else {
             this.$message.error(res.message)
           }
 
         })
       },
-      clear(){
+      clear() {
         for (let k in this.courseAddForm) {
-          this.courseAddForm[k]='';
+          this.courseAddForm[k] = '';
         }
       }
     },
@@ -132,19 +139,21 @@
     },
     mounted() {
       this.getBreadcrumb();
-      // 所有课程分类
+      //所有课程分类(14大类)
       findCategoryTreeApi().then(res => {
+        console.log('课程分类', res);
         this.categoryList = res.children;
-        console.log(this.categoryList)
       });
       /*查询数据字典*/
-      //查询课程等级
-      findDictionaryApi("200").then(res => {
-        this.gradeList = res.dvalue;
+      //查询课程等级type=200
+      findDictionaryApi('200').then(res => {
+        console.log('课程等级字典', res);
+        this.gradeList = res.children;
       });
-      //查询学习模式
-      findDictionaryApi("201").then(res => {
-        this.studymodelList = res.dvalue;
+      //查询学习模式type=201
+      findDictionaryApi('201').then(res => {
+        console.log('学习模式字典', res);
+        this.studymodelList = res.children;
       });
 
     }

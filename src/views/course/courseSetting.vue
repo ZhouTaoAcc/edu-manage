@@ -1,7 +1,8 @@
 <template>
   <div>
+    <!--课程设置导航栏-->
     <el-menu
-      :default-active="activeIndex"
+      :default-active="$router.path"
       router
       class="el-menu-demo"
       mode="horizontal"

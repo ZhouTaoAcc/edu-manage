@@ -9,7 +9,7 @@
       </el-form-item>
       <el-form-item label="课程分类" prop="categoryActive">
         <el-cascader
-          expand-trigger="hover"
+          expand-trigger="click"
           :options="categoryList"
           v-model="categoryActive"
           :props="props">
@@ -17,12 +17,20 @@
       </el-form-item>
       <el-form-item label="课程等级" prop="grade">
         <b v-for="grade in gradeList">
-          <el-radio v-model="courseForm.grade" :label="grade.sdId">{{grade.sdName}}</el-radio>&nbsp;&nbsp;
+          <el-radio v-model="courseForm.grade"
+                    :label="grade.id"
+                    v-if="grade.sdStatus==='1'">
+            {{grade.sdName}}
+          </el-radio>&nbsp;&nbsp;
         </b>
       </el-form-item>
       <el-form-item label="学习模式" prop="studymodel">
-        <b v-for="studymodel_v in studymodelList">
-          <el-radio v-model="courseForm.studymodel" :label="studymodel_v.sdId">{{studymodel_v.sdName}}</el-radio>&nbsp;&nbsp;
+        <b v-for="model in studymodelList">
+          <el-radio v-model="courseForm.studymodel"
+                    :label="model.id"
+                    v-if="model.sdStatus==='1'">
+            {{model.sdName}}
+          </el-radio>&nbsp;&nbsp;
         </b>
 
       </el-form-item>
@@ -39,22 +47,25 @@
 </template>
 
 <script>
+  import {findDictionaryApi} from '../../../service/system'
+  import {findCategoryTreeApi, findCourseBaseById} from '../../../service/course'
+
   export default {
     name: "courseBaseInfo",
     data() {
       return {
         dotype: '',
         courseid: '',
-        studymodelList: [],
-        gradeList: [],
+        studymodelList: [],//学习模式字典
+        gradeList: [],//课程等级字典
         editLoading: false,
         props: {
           value: 'id',
-          label: 'label',
+          label: 'name',
           children: 'children'
         },
-        categoryList: [],
-        categoryActive: [],
+        categoryList: [],//所有分类数组
+        categoryActive: [],//选择的分类
         courseForm: {
           id: '',
           name: '',
@@ -93,8 +104,8 @@
               let st = this.categoryActive[1];
               this.courseForm.mt = mt;
               this.courseForm.st = st;
-              let id = this.courseForm.id
-              courseApi.updateCoursebase(id, this.courseForm).then((res) => {
+              let id = this.courseForm.id;
+              updateCoursebase(id, this.courseForm).then((res) => {
                 this.editLoading = false;
                 if (res.success) {
                   this.$message({
@@ -118,27 +129,32 @@
 
     },
     mounted() {
-      //查询数据字典字典
-      systemApi.sys_getDictionary('201').then((res) => {
-        console.log(res);
-        this.studymodelList = res.dvalue;
-      });
-      systemApi.sys_getDictionary('200').then((res) => {
-        this.gradeList = res.dvalue;
-      });
-      //取课程分类
-      courseApi.category_findlist({}).then((res) => {
+      //所有课程分类(14大类)
+      findCategoryTreeApi().then(res => {
+        console.log('课程分类', res);
         this.categoryList = res.children;
+      });
+      /*查询数据字典*/
+      //查询课程等级type=200
+      findDictionaryApi('200').then(res => {
+        console.log('课程等级字典', res);
+        this.gradeList = res.children;
+      });
+      //查询学习模式type=201
+      findDictionaryApi('201').then(res => {
+        console.log('学习模式字典', res);
+        this.studymodelList = res.children;
       });
       //查询课程信息
       //课程id
       this.courseid = this.$route.params.courseid;
-      courseApi.getCoursebaseById(this.courseid).then((res) => {
-//          console.log(res);
-        this.courseForm = res;
+      findCourseBaseById(this.courseid).then((res) => {
+        this.courseForm = {...res};
+        console.log(this.courseForm);
         //课程分类显示，需要两级分类
         this.categoryActive.push(this.courseForm.mt);
         this.categoryActive.push(this.courseForm.st);
+        console.log(this.categoryActive);
       });
     }
   }

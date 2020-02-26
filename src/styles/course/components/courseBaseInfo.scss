@@ -1,4 +1,4 @@
-.courseBaseInfo{
+.courseBaseInfo {
   background: #FFF;
   box-sizing: border-box;
   padding: 16px;
@@ -7,4 +7,40 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 10px 0 rgba(128, 145, 165, 0.2);
+  min-height: 510px;
+  max-height: 510px;
+  overflow-y: auto;
+  .el-form {
+    display: flex;
+    flex-direction: column;
+    .el-form-item {
+      width: 500px;
+      margin-left: 400px;
+      /deep/ .el-form-item__content {
+        width: 400px;
+      }
+      /deep/ .el-cascader .el-input .el-input__inner {
+        text-overflow: ellipsis;
+        width: 400px;
+      }
+      /deep/ .el-textarea__inner {
+        max-height: 100px;
+      }
+    }
+    /deep/ .el-form-item__error {
+      color: #F56C6C;
+      font-size: 14px;
+      line-height: 1;
+      padding-top: 4px;
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
+  }
+  .dialog-footer {
+    margin-left: 600px;
+    .el-button {
+      margin-right: 30px;
+    }
+  }
 }

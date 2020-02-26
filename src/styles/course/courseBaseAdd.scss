@@ -38,7 +38,7 @@
       flex-direction: column;
       .el-form-item {
         width: 500px;
-        margin-left: 420px;
+        margin-left: 400px;
         /deep/ .el-form-item__content {
           width: 400px;
         }
@@ -47,12 +47,21 @@
           width: 400px;
         }
         /deep/ .el-textarea__inner {
-          max-height: 80px;
+          max-height: 100px;
         }
+      }
+      /deep/ .el-form-item__error {
+        color: #F56C6C;
+        font-size: 14px;
+        line-height: 1;
+        padding-top: 4px;
+        position: absolute;
+        top: 100%;
+        left: 0;
       }
     }
     .dialog-footer {
-      margin-left: 600px;
+      margin-left: 580px;
       .el-button {
         margin-right: 30px;
       }
