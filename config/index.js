@@ -16,23 +16,29 @@ module.exports = {
         target: 'http://localhost:31001',  //cms页面管理服务
         pathRewrite: {
           '^/api': ''//实际请求去掉/api
-        },
+        }
       },
       '/api/system': {
         target: 'http://localhost:31001',  //系统管理服务
         pathRewrite: {
           '^/api': ''//实际请求去掉/api
-        },
+        }
       },
       '/api/course': {
         target: 'http://localhost:31002', //课程管理服务
         pathRewrite: {
           '^/api': ''//实际请求去掉/api
-        },
+        }
+      },
+      '/api/fileServer':{
+        target: 'http://localhost:51000', //文件服务
+        pathRewrite: {
+          '^/api': ''//实际请求去掉/api
+        }
       }
     },
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: 'manage.eduonline.com', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,

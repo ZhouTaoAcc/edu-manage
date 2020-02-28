@@ -68,7 +68,7 @@
         levelList: [],//面包屑
         props: {
           /*级联绑定*/
-          value: 'id',
+          value: 'name',
           label: 'name',
           children: 'children'
         },
@@ -113,19 +113,22 @@
       },
       //新增课程提交
       save() {
-        //处理课程分类
-        this.courseAddForm.mt = this.categoryActive[0];//大分类
-        this.courseAddForm.st = this.categoryActive[1];//小分类
-        console.log('添加参数', this.courseAddForm);
-        addCourseBaseApi(this.courseAddForm).then(res => {
-          if (res.success) {
-            this.$message.success(res.message);
-            //跳转到我的课程
-            this.$router.push({path: '/courseManage/myCourse/list'})
-          } else {
-            this.$message.error(res.message)
+        this.$refs.courseAddForm.validate((valid) => {
+          if (valid) {
+            //处理课程分类
+            this.courseAddForm.mt = this.categoryActive[0];//大分类
+            this.courseAddForm.st = this.categoryActive[1];//小分类
+            console.log('添加参数', this.courseAddForm);
+            addCourseBaseApi(this.courseAddForm).then(res => {
+              if (res.success) {
+                this.$message.success(res.message);
+                //跳转到我的课程
+                this.$router.push({path: '/courseManage/myCourse/list'})
+              } else {
+                this.$message.error(res.message)
+              }
+            })
           }
-
         })
       },
       clear() {

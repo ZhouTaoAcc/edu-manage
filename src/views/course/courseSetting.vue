@@ -7,13 +7,20 @@
       class="el-menu-demo"
       mode="horizontal"
     >
-      <el-menu-item :index="'/courseManage/setting/courseIndex/'+this.courseid">课程首页</el-menu-item>
-      <el-menu-item :index="'/courseManage/setting/baseInfo/'+this.courseid">基本信息</el-menu-item>
-      <el-menu-item :index="'/courseManage/setting/picture/'+this.courseid">课程图片</el-menu-item>
-      <el-menu-item :index="'/courseManage/setting/marketInfo/'+this.courseid">课程营销</el-menu-item>
-      <el-menu-item :index="'/courseManage/setting/plan/'+this.courseid">课程计划</el-menu-item>
-      <el-menu-item :index="'/courseManage/setting/teacher/'+this.courseid">教师信息</el-menu-item>
-      <el-menu-item :index="'/courseManage/setting/publish/'+this.courseid">发布课程</el-menu-item>
+      <el-menu-item :index="{ path:'/courseManage/setting/courseIndex',  query: {courseid: this.courseid }}">课程首页
+      </el-menu-item>
+      <el-menu-item :index="{ path:'/courseManage/setting/baseInfo',  query: {courseid: this.courseid }}">基本信息
+      </el-menu-item>
+      <el-menu-item :index="{ path:'/courseManage/setting/picture',  query: {courseid: this.courseid }}">课程图片
+      </el-menu-item>
+      <el-menu-item :index="{ path:'/courseManage/setting/marketInfo', query: {courseid: this.courseid }}">课程营销
+      </el-menu-item>
+      <el-menu-item :index="{ path:'/courseManage/setting/plan', query: {courseid: this.courseid }}">课程计划
+      </el-menu-item>
+      <el-menu-item :index="{ path:'/courseManage/setting/teacher', query: {courseid: this.courseid }}">教师信息
+      </el-menu-item>
+      <el-menu-item :index="{ path:'/courseManage/setting/publish', query: {courseid: this.courseid }}">发布课程
+      </el-menu-item>
     </el-menu>
     <!--components下面的组件都在此处渲染-->
     <router-view class="setting-main"></router-view>
@@ -30,9 +37,12 @@
     },
     mounted() {
       //课程id
-      this.courseid = this.$route.params.id;
+      this.courseid = this.$route.query.courseid;
       //跳转到课程基本信息
-      this.$router.push({path: '/courseManage/setting/baseInfo/' + this.courseid})
+      this.$router.push({
+        path: '/courseManage/setting/baseInfo',
+        query: {courseid: this.courseid}
+      })
     }
   }
 </script>
@@ -48,8 +58,9 @@
       width: 150px;
     }
   }
+
   //锚点区域
-  .setting-main{
+  .setting-main {
     background: #FFF;
     box-sizing: border-box;
     padding: 16px;

@@ -74,15 +74,15 @@
     <div class="edu-courseManageList-center">
       <div class="edu-courseManageList-content">
         <el-row v-loading="loading">
-          <el-col :span="4" >
+          <el-col :span="4">
             <el-card :body-style="{ padding: '5px' }">
-              <img src="/static/images/add.jpg" class="image">
+              <img src="/static/images/addCourse.jpg" class="image">
               <div style="padding: 14px;">
                 <span>课程名称</span>
                 <div class="bottom clearfix">
                   <time class="time"></time>
                   <router-link class="mui-tab-item" :to="{path:'/courseManage/courseBase/add'}">
-                    <el-button type="text" class="button" >新增课程</el-button>
+                    <el-button type="text" class="button">新增课程</el-button>
                   </router-link>
                 </div>
               </div>
@@ -90,11 +90,12 @@
           </el-col>
           <el-col :span="4" v-for="(item,index) in this.cardData" :key=index>
             <el-card :body-style="{ padding: '5px'}">
-              <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+              <img :src="item.pic!==null?imgUrl+item.pic:'/static/images/noImg.jpg'"
+                   class="image">
               <div style="padding: 14px;">
-                <span>{{item.name}}</span>
+                <span>课程名称</span>
                 <div class="bottom clearfix">
-                  <time class="time">{{ currentDate }}</time>
+                  <span>{{item.name}}</span>
                   <el-button type="text" class="button" @click="courseSetBtn(item.id)">课程设置</el-button>
                 </div>
               </div>
@@ -105,13 +106,9 @@
       <div class="edu-courseManageList-page">
         <div class="edu-templateList-pag-content">
           <el-pagination
-            :current-page="searchCourseParams.pageNo"
-            :page-sizes="[10,20,50,100]"
-            :page-size="searchCourseParams.pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalCount"
-            @current-change="handleCurrentChange"
-            @size-change="handleSizeChange">
+            background
+            layout="total,prev, pager, next"
+            :total=this.totalCount>
           </el-pagination>
         </div>
       </div>
@@ -121,24 +118,24 @@
 
 <script>
   import {findCourseListApi} from '../../service/course'
-
+  import sysUrlConfig from '../../../static/config/baseUrl'
   export default {
     name: "courseManageList",
     data() {
       return {
-        currentDate: new Date(),
-        loading:true,
+        loading: true,
         searchCourseParams: {
           name: '',
           status: '',
           mt: '',
-          pageNo: 1,
-          pageSize: 10
+          pageNo: 0,
+          pageSize: 5
         },
         cardData: [],//存储后台返回的数据
         copyParmas: {}, //查询使用的参数
         totalCount: 0,	//总个数
-        levelList: null
+        levelList: null,
+        imgUrl: sysUrlConfig.imgUrl
       }
     },
     watch: {
@@ -168,7 +165,7 @@
           console.log("查询分页", res);
           this.cardData = res.data.list;
           this.totalCount = res.data.total;
-          this.loading=false;
+          this.loading = false;
         }, err => {
           this.$message.warning(err);
         });
@@ -178,9 +175,12 @@
         this.copyParmas = {...this.searchCourseParams};
         this.showListInfo();
       },
-      courseSetBtn(id){
-        if(id){
-          this.$router.push({path: '/courseManage/courseSetting/'+id})
+      courseSetBtn(id) {
+        if (id) {/*使用query方式传参 path ,query*/
+          this.$router.push({
+            path: '/courseManage/courseSetting',
+            query: {courseid: id}
+          })
         }
       },
       //页码切换方法 val [Number] 切换到的页码

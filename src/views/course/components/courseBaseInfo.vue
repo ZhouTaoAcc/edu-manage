@@ -9,7 +9,7 @@
       </el-form-item>
       <el-form-item label="课程分类" prop="categoryActive">
         <el-cascader
-          expand-trigger="click"
+          expand-trigger="hover"
           :options="categoryList"
           v-model="categoryActive"
           :props="props">
@@ -48,7 +48,7 @@
 
 <script>
   import {findDictionaryApi} from '../../../service/system'
-  import {findCategoryTreeApi, findCourseBaseById} from '../../../service/course'
+  import {findCategoryTreeApi, findCourseBaseById,updateCourseBaseApi} from '../../../service/course'
 
   export default {
     name: "courseBaseInfo",
@@ -60,7 +60,7 @@
         gradeList: [],//课程等级字典
         editLoading: false,
         props: {
-          value: 'id',
+          value: 'name',
           label: 'name',
           children: 'children'
         },
@@ -105,7 +105,8 @@
               this.courseForm.mt = mt;
               this.courseForm.st = st;
               let id = this.courseForm.id;
-              updateCoursebase(id, this.courseForm).then((res) => {
+              console.log('编辑参数',this.courseForm);
+              updateCourseBaseApi(id, this.courseForm).then((res) => {
                 this.editLoading = false;
                 if (res.success) {
                   this.$message({
@@ -113,20 +114,16 @@
                     type: 'success'
                   });
                 } else {
-                  if (res.message) {
-                    this.$message.error(res.message);
-                  } else {
-                    this.$message.error('提交失败');
-                  }
+                  this.$message({
+                    message: res.message,
+                    type: 'error'
+                  });
                 }
               });
             });
           }
         });
       }
-    },
-    created() {
-
     },
     mounted() {
       //所有课程分类(14大类)
@@ -147,13 +144,12 @@
       });
       //查询课程信息
       //课程id
-      this.courseid = this.$route.params.courseid;
+      this.courseid = this.$route.query.courseid;
       findCourseBaseById(this.courseid).then((res) => {
         this.courseForm = {...res};
-        console.log(this.courseForm);
         //课程分类显示，需要两级分类
-        this.categoryActive.push(this.courseForm.mt);
-        this.categoryActive.push(this.courseForm.st);
+        this.categoryActive[0] = this.courseForm.mt;
+        this.categoryActive[1] = this.courseForm.st;
         console.log(this.categoryActive);
       });
     }

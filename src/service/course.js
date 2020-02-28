@@ -22,3 +22,19 @@ export const findCategoryTreeApi = () => {
 export const findCourseBaseById= (id) => {
   return Http.requestQuickGet(urlPre + '/course/courseBase/findById/'+id);
 };
+//5、更新课程基础信息
+export const updateCourseBaseApi = (id,params) => {
+  return Http.requestPut(urlPre + '/course/courseBase/update/'+id, params);
+};
+//6。查询课程图片
+export const findCoursePicById= (id) => {
+  return Http.requestQuickGet(urlPre + '/course/coursePic/findById/'+id);
+};
+//7。添加课程图片
+export const addCoursePicApi= (params) => {
+  return Http.requestPost(urlPre + '/course/coursePic/add', params);
+};
+//8。删除课程图片
+export const deleteCoursePicApi= (id) => {
+  return Http.requestGet(urlPre + '/course/coursePic/delete/'+id);
+};

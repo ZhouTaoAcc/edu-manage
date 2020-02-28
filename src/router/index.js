@@ -78,50 +78,50 @@ export default new Router({
           meta: {title: '我的课程'}
         },
         {
-          path: 'courseSetting/:id',
+          path: 'courseSetting',
           name: '课程设置',
           component: courseSetting,
           hidden: true,
           meta: {title: '课程设置'},
           children: [
             {
-              path: '/courseManage/setting/courseIndex/:courseid',
+              path: '/courseManage/setting/courseIndex',
               name: '课程首页',
               component: courseIndex,
               hidden: false
             },
             {
-              path: '/courseManage/setting/baseInfo/:courseid',
+              path: '/courseManage/setting/baseInfo',
               name: '基本信息',
               component: courseBaseInfo,
               hidden: false
             },
             {
-              path: '/courseManage/setting/picture/:courseid',
+              path: '/courseManage/setting/picture',
               name: '课程图片',
               component: coursePicture,
               hidden: false
             },
             {
-              path: '/courseManage/setting/marketInfo/:courseid',
+              path: '/courseManage/setting/marketInfo',
               name: '营销信息',
               component: courseMarketInfo,
               hidden: false
             },
             {
-              path: '/courseManage/setting/plan/:courseid',
+              path: '/courseManage/setting/plan',
               name: '课程计划',
               component: coursePlan,
               hidden: false
             },
             {
-              path: '/courseManage/setting/teacher/:courseid',
+              path: '/courseManage/setting/teacher',
               name: '教师信息',
               component: courseTeacher,
               hidden: false
             },
             {
-              path: '/courseManage/setting/publish/:courseid',
+              path: '/courseManage/setting/publish',
               name: '发布课程',
               component: coursePublish,
               hidden: false
