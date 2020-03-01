@@ -19,22 +19,51 @@ export const findCategoryTreeApi = () => {
   return Http.requestQuickGet(urlPre + '/course/category/tree');
 };
 //4.查找课程基础信息
-export const findCourseBaseById= (id) => {
-  return Http.requestQuickGet(urlPre + '/course/courseBase/findById/'+id);
+export const findCourseBaseById = (id) => {
+  return Http.requestQuickGet(urlPre + '/course/courseBase/findById/' + id);
 };
 //5、更新课程基础信息
-export const updateCourseBaseApi = (id,params) => {
-  return Http.requestPut(urlPre + '/course/courseBase/update/'+id, params);
+export const updateCourseBaseApi = (id, params) => {
+  return Http.requestPut(urlPre + '/course/courseBase/update/' + id, params);
 };
 //6。查询课程图片
-export const findCoursePicById= (id) => {
-  return Http.requestQuickGet(urlPre + '/course/coursePic/findById/'+id);
+export const findCoursePicById = (id) => {
+  return Http.requestQuickGet(urlPre + '/course/coursePic/findById/' + id);
 };
 //7。添加课程图片
-export const addCoursePicApi= (params) => {
+export const addCoursePicApi = (params) => {
   return Http.requestPost(urlPre + '/course/coursePic/add', params);
 };
 //8。删除课程图片
-export const deleteCoursePicApi= (id) => {
-  return Http.requestGet(urlPre + '/course/coursePic/delete/'+id);
+export const deleteCoursePicApi = (id) => {
+  return Http.requestGet(urlPre + '/course/coursePic/delete/' + id);
+};
+//9.查询课程营销信息
+export const findCourseMarketInfoById = (id) => {
+  return Http.requestGet(urlPre + '/course/courseMarketInfo/findById/' + id);
+};
+//10.更新课程营销信息
+export const updateCourseMarketInfoApi = (id, params) => {
+  return Http.requestPut(urlPre + '/course/courseMarketInfo/update/' + id, params);
+};
+
+//11.查询某个课程的课程计划(树) 通过课程id
+export const findCoursePlanApi = (courseId) => {
+  return Http.requestQuickGet(urlPre + '/course/plan/findList/' + courseId);
+};
+//12.查询课程计划（一条记录） 通过课程计划主键
+export const findCoursePlanById = (id) => {
+  return Http.requestQuickGet(urlPre + '/course/plan/findById/' + id);
+};
+//13.添加课程计划
+export const addCoursePlanApi = (params) => {
+  return Http.requestPost(urlPre + '/course/plan/add' ,params);
+};
+//14.删除课程计划
+export const deleteCoursePlanById = (id) => {
+  return Http.requestPost(urlPre + '/course/plan/delete/' + id);
+};
+//15。保存媒资信息
+export const addMediaApi = (params) => {
+  return Http.requestPost(urlPre+'/course/media/add',params);
 };

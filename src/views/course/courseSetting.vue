@@ -7,19 +7,19 @@
       class="el-menu-demo"
       mode="horizontal"
     >
-      <el-menu-item :index="{ path:'/courseManage/setting/courseIndex',  query: {courseid: this.courseid }}">课程首页
+      <el-menu-item :index="'/courseManage/setting/courseIndex'+'?courseid='+this.courseid">课程首页
       </el-menu-item>
-      <el-menu-item :index="{ path:'/courseManage/setting/baseInfo',  query: {courseid: this.courseid }}">基本信息
+      <el-menu-item :index="'/courseManage/setting/baseInfo'+'?courseid='+this.courseid">基本信息
       </el-menu-item>
-      <el-menu-item :index="{ path:'/courseManage/setting/picture',  query: {courseid: this.courseid }}">课程图片
+      <el-menu-item :index="'/courseManage/setting/picture'+'?courseid='+ this.courseid">课程图片
       </el-menu-item>
-      <el-menu-item :index="{ path:'/courseManage/setting/marketInfo', query: {courseid: this.courseid }}">课程营销
+      <el-menu-item :index=" '/courseManage/setting/marketInfo'+'?courseid='+  this.courseid ">课程营销
       </el-menu-item>
-      <el-menu-item :index="{ path:'/courseManage/setting/plan', query: {courseid: this.courseid }}">课程计划
+      <el-menu-item :index=" '/courseManage/setting/plan'+'?courseid='+ this.courseid ">课程计划
       </el-menu-item>
-      <el-menu-item :index="{ path:'/courseManage/setting/teacher', query: {courseid: this.courseid }}">教师信息
+      <el-menu-item :index=" '/courseManage/setting/teacher'+'?courseid='+this.courseid ">教师信息
       </el-menu-item>
-      <el-menu-item :index="{ path:'/courseManage/setting/publish', query: {courseid: this.courseid }}">发布课程
+      <el-menu-item :index=" '/courseManage/setting/publish'+'?courseid='+ this.courseid ">发布课程
       </el-menu-item>
     </el-menu>
     <!--components下面的组件都在此处渲染-->
@@ -42,7 +42,8 @@
       this.$router.push({
         path: '/courseManage/setting/baseInfo',
         query: {courseid: this.courseid}
-      })
+      });
+      this.$router.path = '/courseManage/setting/baseInfo'+'?courseid='+this.courseid;//默认选中
     }
   }
 </script>

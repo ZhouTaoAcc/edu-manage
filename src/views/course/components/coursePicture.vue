@@ -46,7 +46,7 @@
         fileList: [],//组件绑定 回显
         uploadData: {
           filetag: "coursePic",
-          businesskey: this.courseid,
+          businesskey: this.$route.query.courseid,
           files:null
         },//上传提交的额外的数据 ，将uploadData转成key/value提交给服务器
         imgUrl: sysUrlConfig.imgUrl,
@@ -88,6 +88,7 @@
       rejectUpload() {
         this.$message.warning("最多上传1个图片");
       },
+      //删除文件
       handleRemove(file, fileList) {
         deleteCoursePicApi(this.courseid).then(res => {
           if(res.success){
@@ -121,6 +122,8 @@
           let imgUrl = this.imgUrl + res.pic;
           //将图片服务器地址设置到fileList[] 回显
           this.fileList.push({name: 'pic', url: imgUrl, fileId: res.pic})
+        }else {
+          this.$message.warning("暂无图片信息！")
         }
       });
     }

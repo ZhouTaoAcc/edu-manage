@@ -41,14 +41,14 @@
 
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click.native="save" :loading="editLoading">提交</el-button>
+      <el-button type="primary" @click.native="save()" :loading="editLoading">提交</el-button>
     </div>
   </div>
 </template>
 
 <script>
   import {findDictionaryApi} from '../../../service/system'
-  import {findCategoryTreeApi, findCourseBaseById,updateCourseBaseApi} from '../../../service/course'
+  import {findCategoryTreeApi, findCourseBaseById, updateCourseBaseApi} from '../../../service/course'
 
   export default {
     name: "courseBaseInfo",
@@ -105,7 +105,7 @@
               this.courseForm.mt = mt;
               this.courseForm.st = st;
               let id = this.courseForm.id;
-              console.log('编辑参数',this.courseForm);
+              console.log('编辑参数', this.courseForm);
               updateCourseBaseApi(id, this.courseForm).then((res) => {
                 this.editLoading = false;
                 if (res.success) {
@@ -146,11 +146,15 @@
       //课程id
       this.courseid = this.$route.query.courseid;
       findCourseBaseById(this.courseid).then((res) => {
-        this.courseForm = {...res};
-        //课程分类显示，需要两级分类
-        this.categoryActive[0] = this.courseForm.mt;
-        this.categoryActive[1] = this.courseForm.st;
-        console.log(this.categoryActive);
+        if (!res) {
+          this.$message.warning("暂无课程基本信息！")
+        } else {
+          this.courseForm = {...res};
+          //课程分类显示，需要两级分类
+          this.categoryActive[0] = this.courseForm.mt;
+          this.categoryActive[1] = this.courseForm.st;
+          console.log(this.categoryActive);
+        }
       });
     }
   }

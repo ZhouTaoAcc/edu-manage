@@ -1,4 +1,4 @@
-.coursePicture {
+.courseMarketInfo {
   background: #FFF;
   box-sizing: border-box;
   padding: 16px;
@@ -14,7 +14,7 @@
     flex-direction: column;
     .el-form-item {
       width: 500px;
-      margin-left: 400px;
+      margin-left: 380px;
       /deep/ .el-form-item__content {
         width: 400px;
       }
@@ -24,6 +24,9 @@
       }
       /deep/ .el-textarea__inner {
         max-height: 100px;
+      }
+      /deep/ .el-range-editor.el-input__inner{
+        width: 400px;
       }
     }
     /deep/ .el-form-item__error {
@@ -38,18 +41,9 @@
   }
   .dialog-footer {
     margin-top: 40px;
-    margin-left: 600px;
+    margin-left: 620px;
     .el-button {
       margin-right: 30px;
     }
-  }
-  .el-dialog__header {
-    height: 24px;
-  }
- /deep/ .el-dialog__body {
-    padding: 10px 10px;
-    color: #606266;
-    font-size: 14px;
-    word-break: break-all;
   }
 }

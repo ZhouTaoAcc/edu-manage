@@ -76,7 +76,7 @@
         <el-row v-loading="loading">
           <el-col :span="4">
             <el-card :body-style="{ padding: '5px' }">
-              <img src="/static/images/addCourse.jpg" class="image">
+              <img src="/static/images/add.jpg" class="image">
               <div style="padding: 14px;">
                 <span>课程名称</span>
                 <div class="bottom clearfix">
