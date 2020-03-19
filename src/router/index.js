@@ -20,6 +20,10 @@ import coursePlan from '../views/course/components/coursePlan'//课程计划
 import courseMarketInfo from '../views/course/components/courseMarketInfo'//营销信息
 import courseTeacher from '../views/course/components/courseTeacher'//教师信息
 import coursePublish from '../views/course/components/coursePublish'//课程发布
+//媒质管理模块
+import mediaListManage from '../views/media/mediaListManage'
+import mediaUpload from '../views/media/mediaUpload'
+//import mediaUpload from '../components/myWebUploader'
 
 Vue.use(Router);
 
@@ -146,17 +150,18 @@ export default new Router({
       meta: {requiresAuth: true},
       children: [
         {
-          path: 'course/list',
-          name: '课程列表',
-          component: pageList,
-          hidden: true,
-          meta: {title: '课程列表'}
+          path: 'myMedia/list',
+          name: '我的媒资',
+          component: mediaListManage,
+          hidden: false,
+          meta: {title: '媒资列表'}
         },
         {
-          path: 'course/list2',
-          name: '页面列表',
-          component: templateListManage,
-          hidden: true
+          path: 'media/upload',
+          name: '上传媒资',
+          component: mediaUpload,
+          meta: {title: '上传媒资'},
+          hidden: false
         }
       ]
     },

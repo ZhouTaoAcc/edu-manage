@@ -10,7 +10,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-   //vue-cli提供的解决跨域问题的方法 依赖于node.js 用服务端代理解决浏览器跨域
+    //vue-cli提供的解决跨域问题的方法 依赖于node.js 用服务端代理解决浏览器跨域
     proxyTable: {
       '/api/cms': {
         target: 'http://localhost:31001',  //cms页面管理服务
@@ -30,8 +30,14 @@ module.exports = {
           '^/api': ''//实际请求去掉/api
         }
       },
-      '/api/fileServer':{
+      '/api/fileServer': {
         target: 'http://localhost:51000', //文件服务
+        pathRewrite: {
+          '^/api': ''//实际请求去掉/api
+        }
+      },
+      '/api/media': {//媒资上传服务
+        target: 'http://localhost:31004', //文件服务
         pathRewrite: {
           '^/api': ''//实际请求去掉/api
         }

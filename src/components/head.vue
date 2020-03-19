@@ -1,47 +1,29 @@
 <template>
   <div>
-
     <el-col :span="24" class="header">
       <el-col :span="14" class="logo" >
         <img src="/static/images/asset-logoIco-white.png" width="176" alt="">{{collapsed ? '' : sysName}}
       </el-col>
-      <!--<el-col :span="10">
-        <div class="tools" @click.prevent="collapse">
-          <i class="fa fa-align-justify"></i>
-        </div>
-      </el-col>-->
       <el-col :span="10" class="userinfo" v-if="this.logined">
-        <!--<el-dropdown trigger="hover">
-         <span class="el-dropdown-link userinfo-inner"><img :src="this.user.sysUserImg!=null?this.user.sysUserImg:'/static/images/small.jpg'"/> {{user.username}}</span>
+        <!--<el-dropdown trigger="hover">-->
+         <!--<span class="el-dropdown-link userinfo-inner"><img :src="this.user.sysUserImg!=null?this.user.sysUserImg:'/static/images/small.jpg'"/> {{user.username}}</span>-->
 
-          <el-dropdown-menu slot="dropdown">
-           <el-dropdown-item>我的消息</el-dropdown-item>
-           <el-dropdown-item>设置</el-dropdown-item>
-           <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
-         </el-dropdown-menu>
-       </el-dropdown>-->
-
+          <!--<el-dropdown-menu slot="dropdown">-->
+           <!--<el-dropdown-item>我的消息</el-dropdown-item>-->
+           <!--<el-dropdown-item>设置</el-dropdown-item>-->
+           <!--<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>-->
+         <!--</el-dropdown-menu>-->
+       <!--</el-dropdown>-->
         <div class="nav">
-
             <div class="usermenu" >
               <span class="el-dropdown-link userinfo-inner"><img :src="this.user.sysUserImg!=null?this.user.sysUserImg:'/static/images/small.jpg'"/></span>
               欢迎您：{{user.username}}
-              <a href="http://www.xuecheng.com" target="_blank"><i class="el-icon-star-on"></i>首页</a>
+              <a href="http://www.eduonline.com" target="_blank"><i class="el-icon-star-on"></i>首页</a>
               <a href="javascript:;" @click="logout" :loading="editLoading"><i class="el-icon-circle-close"></i>退出</a>
             </div>
           </div>
       </el-col>
     </el-col>
-    <!-- 1.0 利用mint-ui中的header组件实现整个系统的头部 -->
-    <!-- <mt-header fixed title="传智播客.黑马程序员Vue商城系统">
-       <router-link to="/" slot="left">
-         <mt-button icon="back">首页</mt-button>
-       </router-link>
-       <mt-button icon="more" slot="right">
-         <router-link to="/login">登录</router-link>|
-         <router-link to="/register">注册</router-link>
-       </mt-button>
-     </mt-header>-->
   </div>
 </template>
 <script type="text/javascript">
@@ -56,9 +38,10 @@
         user:{
           userid:'',
           username: '',
-          userimg: ''
+          userimg: '',
+          sysUserImg:''
         },
-        logined:false,
+        logined:true,
         collapsed: false,
 
 
@@ -99,7 +82,7 @@
         let activeUser= utilApi.getActiveUser();
 
         if(activeUser){
-          this.logined = true
+          this.logined = true;
           this.user = activeUser;
           //console.log(this.user.username)
         }

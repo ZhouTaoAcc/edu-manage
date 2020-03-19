@@ -1,8 +1,7 @@
 const sysUrlConfig = {
   ApiUrlPre: '/api',
-  eduApiUrl: 'http://api.xuecheng.com/',
-  imgUrl: 'http://img.eduonline.com:82/',
-  videoUrl: 'http://video.eduonline.com/',
+  imgUrl: 'http://img.eduonline.com/img/',
+  videoUrl: 'http://video.eduonline.com/video/',
   openAuthenticate: true,
   openAuthorize: true
 };

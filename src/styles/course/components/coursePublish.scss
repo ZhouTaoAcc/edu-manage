@@ -1,0 +1,29 @@
+.coursePublish {
+  background: #FFF;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: 4px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 10px 0 rgba(128, 145, 165, 0.2);
+  overflow-y: auto;
+  height: 513px;
+  .box-card {
+    margin-bottom: 20px;
+    .status{
+      border-radius: 4px;
+      color: #fff;
+      font-size: 14px;
+      &.doing{
+        background: #99FF00;
+      }
+      &.pub{
+        background: #FFCC00;
+      }
+      &.done{
+        background: #D5D5D5;
+      }
+    }
+  }
+}

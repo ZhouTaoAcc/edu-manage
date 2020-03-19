@@ -10,16 +10,25 @@
   overflow-y: auto;
   height: 513px;
   .tree-area {
-    width: 40%;
+    width: 60%;
     padding-right: 10px;
     border-right: 2px solid rgba(128, 145, 165, 0.2);
     height: 100%;
+    .operation{
+      float: right;
+      color: #909399;
+      padding-right: 10px;
+      &:hover{
+        cursor: pointer;
+        color: rgba(47,144,255,1);
+      }
+    }
   }
   .showContent {
 
-  }
+    }
   .BottomBtn {
-    margin-left: 60px !important;
+    margin-left: 45px !important;
   }
 
 }

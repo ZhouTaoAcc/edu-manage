@@ -2,7 +2,8 @@
   <div class="coursePlan">
     <div class="tree-area">
       <div class="course-title">
-        <h4>课程名称:{{courseName}}</h4>
+        <span class="el-icon-circle-plus operation" @click="addCoursePlanBtn"> 添加课程计划</span>
+        <h4>课程名称:{{rootName}}</h4>
         <h5>&nbsp;&nbsp;课程计划</h5>
       </div>
       <!--采用自定义树形控件-->
@@ -25,7 +26,7 @@
     <el-dialog :title="editorTitle" :visible.sync="coursePlanFormVisible">
       <el-form ref="coursePlanForm"
                :model="coursePlanForm"
-               label-width="200px"
+               label-width="250px"
                style="width:500px;"
                :rules="rules">
         <el-form-item label="上级结点" v-if="!editorFlag">
@@ -50,12 +51,6 @@
         <el-form-item label="章节/课时介绍" prop="description">
           <el-input type="textarea" v-model="coursePlanForm.description" placeholder="章节/课时介绍"></el-input>
         </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-radio-group v-model="coursePlanForm.status">
-            <el-radio class="radio" label="0">未发布</el-radio>
-            <el-radio class="radio" label='1'>已发布</el-radio>
-          </el-radio-group>
-        </el-form-item>
         <el-form-item class="BottomBtn">
           <el-button type="primary" @click="submitPlan">提交</el-button>
           <el-button @click="resetForm">重置</el-button>
@@ -73,7 +68,6 @@
     addCoursePlanApi,
     findCoursePlanById,
     deleteCoursePlanById,
-    findCourseBaseById
   } from '../../../service/course'
 
   export default {
@@ -88,21 +82,29 @@
           label: 'pname',
           children: 'children'
         },
+        rootId:'',//顶层父亲id
+        rootName:'',//顶层父亲name
         currentNodeName: '',//存当前节点name
         coursePlanForm: {//添加的课程计划
           parentid: '',//父节点id
           pname: '',
           ptype: '',
-          grade: '',
+          grade: '',//层级 1 2 3 4级
           timelength: '',
           status: '',
           orderby: '',
           description: '',
           courseid: this.$route.query.courseid
         },
+        courseMediaForm:{//添加的课程计划对应的媒质信息
+          courseId: this.$route.query.courseid,
+          coursePlanId:'',
+          mediaUrl:'',
+          mediaId:'',
+          mediaFileOriginalName:''
+        },
         editorFlag: false,//是否编辑
         editorTitle: '',//标题
-        courseName: '',
         rules: {
           pname: [
             {required: true, message: '请输入课程计划名称', trigger: 'blur'}
@@ -118,7 +120,11 @@
       findCoursePlan() {//查询本课程的课程计划树
         findCoursePlanApi(this.courseid).then(res => {
           if (res && res.children) {
+            console.log(res);
+            this.rootId=res.id;
+            this.rootName=res.pname;
             this.coursePlanList = res.children;
+            console.log('本课程计划=>',this.coursePlanList)
           }
         })
       },
@@ -143,7 +149,8 @@
               <el-button class="el-icon-edit" style="font-size: 14px;" type="text"
                          on-click={() => this.editBtn(data)}>修改</el-button>
               <el-button class="el-icon-delete" style="font-size: 14px;" type="text"
-                         on-click={() => this.remove(data)}>删除</el-button>
+                         on-click={()=> this.remove(data)}>删除
+              </el-button>
             </span>
           </span>);
       },
@@ -174,6 +181,16 @@
         } else {
           this.$message.warning("最多支持3级!");
         }
+      },
+      //添加顶级节点
+      addCoursePlanBtn(){
+        this.resetForm();
+        this.editorFlag = false;
+        this.editorTitle = '增加课程计划';
+        this.coursePlanFormVisible = true;
+        this.coursePlanForm.parentid=this.rootId;
+        this.coursePlanForm.grade='1';
+        this.currentNodeName= this.rootName;
       },
       //提交课程计划到数据库
       submitPlan() {
@@ -234,10 +251,6 @@
       this.courseid = this.$route.query.courseid;
       //查询课程计划
       this.findCoursePlan();
-
-      findCourseBaseById(this.courseid).then((res) => {
-        this.courseName = res.name;
-      });
     }
   }
 </script>

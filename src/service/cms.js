@@ -7,7 +7,7 @@ let urlPre = sysUrlConfig.ApiUrlPre;//获取前缀
 /*分页查询*/
 export const findPageListApi =(params) =>{
   let queryParams = QueryString.stringify(params);//将json对象转成key/value字符串
-  return Http.requestQuickGet(urlPre+'/cms/page/list/'+params.pageNo+'/'+params.pageSize+'/'+params.startDate+'/'+params.endDate+'?'+queryParams);
+  return Http.requestQuickGet(urlPre+'/cms/page/list/'+params.pageNo+'/'+params.pageSize+'?'+queryParams);
 };
 /*添加页面*/
 export const addPageApi=(params)=>{

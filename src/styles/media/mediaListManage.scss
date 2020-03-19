@@ -1,12 +1,14 @@
-.edu-courseManageList-contain {
+/*选择器嵌套格式*/
+.edu-mediaList-contain {
+  //padding: 16px;
   background: rgb(240, 242, 245);
   height: 100%;
   overflow: hidden;
+  overflow-y: auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  /*面包屑*/
-  .breadcrumb-operation {
+  .breadcrumb-operation{
     background: #fff;
     height: 30px;
     padding-top: 10px;
@@ -14,13 +16,20 @@
     margin-bottom: 0.8rem;
     border-radius: 4px;
     display: flex;
-    justify-content: space-between; /*充满一行 左右分布*/
-    .el-breadcrumb {
+    justify-content: space-between;/*充满一行 左右分布*/
+    .el-breadcrumb{
       padding-left: 20px;
     }
+    .operation{
+      color: #909399;
+      padding-right: 20px;
+      &:hover{
+        cursor: pointer;
+        color: rgba(47,144,255,1);
+      }
+    }
   }
-  /*搜索区域*/
-  .edu-courseManageList-top {
+  .edu-mediaList-top { //查询部分
     background: #FFF;
     height: 150px;
     box-sizing: border-box;
@@ -30,20 +39,19 @@
     align-items: center;
     border-radius: 4px;
     box-shadow: 0 0 10px 0 rgba(128, 145, 165, 0.2);
-    //搜索form
-    .edu-courseManageList-ft {
+    .edu-mediaList-ft {
       width: 100%;
       display: flex;
-      justify-content: space-between;
+      //justify-content: space-between;
       flex-direction: column;
-      .edu-courseManageList-fdy {
+      .edu-mediaList-fdy {
         &:nth-last-child(n + 2) {
           margin-bottom: 12px;
         }
-        .edu-courseManageList-fiu {
+        .edu-mediaList-fiu {
           width: 33%;
           margin-bottom: 0;
-          display: inline-flex; /*使el-form-item__label 和.el-form-item__content保持在一行*/
+          display: inline-flex;
           /deep/ .el-form-item__label {
             width: 100px;
             text-align: right;
@@ -79,7 +87,7 @@
           .el-range-editor.el-input__inner {
             width: 100%;
           }
-          /deep/ .el-select .el-input {
+          /deep/ .el-select .el-input{
             width: 300px;
           }
         }
@@ -87,7 +95,7 @@
 
     }
   }
-  .edu-courseManageList-center {
+  .edu-mediaList-content { //显示结果部分
     background: #FFF;
     height: 352px; //中间区域box高度
     box-sizing: border-box;
@@ -97,68 +105,57 @@
     display: flex;
     flex-direction: column;
     box-shadow: 0 0 10px 0 rgba(128, 145, 165, 0.2);
-    .edu-courseManageList-content {
-      /deep/ .el-card {
-        margin: 10px;
-        height: 250px;
-        &:hover{
-         background:#dddddd;
+    .edu-mediaList-res {
+      flex: 1;
+      .edu-mediaList-tab {
+        max-height: calc(100% - 65px);//表格充满中间区域
+        display: flex;
+        flex-direction: column;
+        .el-table th, .el-table tr {
+          height: 57px;
+        }
+        th {
+          //color: rgba(51, 51, 51, 1);
+          font-size: 14px;
+          background-color: #fff;
+          &:nth-child(7) {
+            text-align: right;
+            padding-right: 40px;
+          }
+        }
+        td {
+          &:nth-child(7) {
+            text-align: right;
+            padding-right: 40px;
+          }
+        }
+        .el-form-item__label {
+          white-space: nowrap;
+          color: rgba(51, 51, 51, 1);
+          font-size: 14px;
+        }
+        .tab-btn {
+          margin-right: 0.25rem;
+          color: #427BF1;
+          &:last-child {
+            margin-right: 0;
+          }
+          &:hover{
+            cursor: pointer;
+          }
         }
       }
-      .time {
-        font-size: 13px;
-        color: #999;
-      }
-
-      .bottom {
-        margin-top: 20px;
-        line-height: 20px;
-      }
-
-      .button {
-        margin-top: 10px;
-        padding: 0;
-        float: right;
-      }
-
-      .image {
-        width: 100%;
-        height: 100px;
-        display: block;
-      }
-
-      .clearfix:before,
-      .clearfix:after {
-        display: table;
-        content: "";
-      }
-      .status{
-        border-radius: 4px;
-        color: #fff;
-        font-size: 14px;
-        float: right;
-        &.doing{
-          background:#99FF00;
+      .edu-mediaList-pag {
+        height: 40px;
+        vertical-align: center;
+        .edu-mediaList-pag-content {
+          margin: 20px 24px;
+          text-align: right;
+          align-items: center;
         }
-        &.pub{
-          background: #FFCC00;
-        }
-        &.down{
-          background: #606266;
-        }
-      }
-      .clearfix:after {
-        clear: both
-      }
-    }
-    .edu-courseManageList-page {
-      height: 40px;
-      vertical-align: center;
-      .edu-templateList-pag-content {
-        margin: 20px 24px;
-        text-align: right;
-        align-items: center;
       }
     }
   }
 }
+
+

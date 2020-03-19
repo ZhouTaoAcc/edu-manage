@@ -50,7 +50,7 @@
 <script>
   import {findDictionaryApi} from '../../../service/system'
   import {findCourseMarketInfoById, updateCourseMarketInfoApi} from '../../../service/course'
-
+import moment from 'moment';
   export default {
     name: "courseMarketInfo",
     watch: {
@@ -69,8 +69,8 @@
         handler(val) {
           if (val === '204001') {//永久有效
             this.isShowValid = false;
-            // this.marketForm.startTime = '';
-            // this.marketForm.endTime = '';
+            this.marketForm.startTime=moment(new Date()).format('YYYY-MM-DD 00:00:00');
+            this.marketForm.endTime = moment(new Date()).add(365*2, 'days').format('YYYY-MM-DD 23:59:59')
           } else {
             this.isShowValid = true;
           }
@@ -90,8 +90,8 @@
             this.marketForm.endTime = '';
           } else {
             //日期选择器时间默认为date类型
-            this.marketForm.startTime = val[0];
-            this.marketForm.endTime = val[1];
+            this.marketForm.startTime = new moment(val[0]).format('YYYY-MM-DD HH:mm:ss');
+            this.marketForm.endTime = new moment(val[1]).format('YYYY-MM-DD HH:mm:ss');
           }
         }
       }
@@ -108,7 +108,7 @@
           valid: '',
           qq: '',
           price: '',//现价格
-          startTime: '',
+          startTime:'',
           endTime: ''
         },
         chargeList: [],//课程价格字典

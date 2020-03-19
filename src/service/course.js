@@ -67,3 +67,12 @@ export const deleteCoursePlanById = (id) => {
 export const addMediaApi = (params) => {
   return Http.requestPost(urlPre+'/course/media/add',params);
 };
+
+//16 课程预览
+export const coursePreviewApi = (id) => {
+  return Http.requestQuickGet(urlPre+'/course/info/preView/'+id);
+};
+//17。课程发布
+export const coursePublishApi = (id) => {
+  return Http.requestQuickGet(urlPre+'/course/info/publish/'+id);
+};

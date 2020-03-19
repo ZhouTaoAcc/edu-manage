@@ -48,8 +48,8 @@
         <div class="item">
           <el-form-item label="页面类型">
             <el-radio-group v-model="pageForm.pageType">
-              <el-radio class="radio" label="0">静态</el-radio>
-              <el-radio class="radio" label="1">动态</el-radio>
+              <el-radio class="radio" :label="0">静态</el-radio>
+              <el-radio class="radio" :label="1">动态</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="静态文件ID" prop="htmlFileId">
@@ -150,6 +150,10 @@
           {
             templateId: '5e4920f50a8f29f6f85fd69f',
             templateName: '轮播图'
+          },
+          {
+            templateId: '5e6348001ddb9b2cc0bf6256',
+            templateName: '课程详情'
           }
         ],
         rules: {

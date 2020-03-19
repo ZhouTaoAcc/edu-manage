@@ -29,13 +29,13 @@
             ></el-input>
           </el-form-item>
           <el-form-item
-            label="课程类别："
+            label="所属公司："
             class="edu-courseManageList-fiu"
-            prop="mt"
+            prop="companyId"
           >
             <el-input
-              v-model="searchCourseParams.mt"
-              placeholder="请输入课程类别"
+              v-model="searchCourseParams.companyId"
+              placeholder="请输入所属公司"
               :clearable="true"
             ></el-input>
           </el-form-item>
@@ -44,11 +44,14 @@
             class="edu-courseManageList-fiu"
             prop="status"
           >
-            <el-input
-              v-model="searchCourseParams.status"
-              placeholder="请输入课程状态"
-              :clearable="true"
-            ></el-input>
+            <el-select v-model="searchCourseParams.status" placeholder="请选择课程状态"
+                       clearable>  
+              <el-option v-for="item in courseStatus"
+                         :key="item.value"
+                         :label="item.label"
+                         :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
         </div>
         <div class="edu-courseManageList-fdy">
@@ -94,6 +97,7 @@
                    class="image">
               <div style="padding: 14px;">
                 <span>课程名称</span>
+                <span :class="item.status=='202001'?'status doing':item.status=='202002'?'status pub':'status down'">{{item.status |formatStatus}}</span>
                 <div class="bottom clearfix">
                   <span>{{item.name}}</span>
                   <el-button type="text" class="button" @click="courseSetBtn(item.id)">课程设置</el-button>
@@ -108,7 +112,10 @@
           <el-pagination
             background
             layout="total,prev, pager, next"
-            :total=this.totalCount>
+            :total=this.totalCount
+            @current-change="handleCurrentChange"
+            :current-page="searchCourseParams.pageNo+1"
+            :page-size="searchCourseParams.pageSize">
           </el-pagination>
         </div>
       </div>
@@ -119,6 +126,7 @@
 <script>
   import {findCourseListApi} from '../../service/course'
   import sysUrlConfig from '../../../static/config/baseUrl'
+
   export default {
     name: "courseManageList",
     data() {
@@ -127,15 +135,21 @@
         searchCourseParams: {
           name: '',
           status: '',
-          mt: '',
+          companyId: '',
           pageNo: 0,
-          pageSize: 5
+          pageSize: 11 //每页默认显示11条
         },
+        status_class: '',
         cardData: [],//存储后台返回的数据
         copyParmas: {}, //查询使用的参数
         totalCount: 0,	//总个数
         levelList: null,
-        imgUrl: sysUrlConfig.imgUrl
+        imgUrl: sysUrlConfig.imgUrl,
+        courseStatus: [
+          {label: "制作中", value: 202001},
+          {label: "已发布", value: 202002},
+          {label: "已下架", value: 202003}
+        ]
       }
     },
     watch: {
@@ -147,6 +161,17 @@
       this.copyParmas = {...this.searchCourseParams};
       this.showListInfo();
       this.getBreadcrumb();
+    },
+    filters: {
+      formatStatus(val) {
+        if (val === '202001') {
+          return '制作中';
+        } else if (val === '202002') {
+          return '已发布';
+        } else if (val === '202003') {
+          return '已下架';
+        }
+      }
     },
     methods: {
       //生成面包屑
@@ -202,7 +227,7 @@
           this.searchCourseParams[k] = '';
         }
         this.searchCourseParams.pageNo = 0;
-        this.searchCourseParams.pageSize = 10;
+        this.searchCourseParams.pageSize = 11;
         this.copyParmas = {...this.searchCourseParams};
         this.showListInfo();
       }

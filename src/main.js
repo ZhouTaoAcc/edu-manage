@@ -12,7 +12,6 @@ import vueResource from 'vue-resource';
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
-// 在Vue中全局使用mintui
 Vue.use(ElementUI);
 Vue.use(Vuex);
 Vue.use(vueResource);

@@ -115,7 +115,7 @@
             <el-table-column
               prop="siteDomain"
               label="站点域名"
-              min-width="150">
+              min-width="200">
               <template slot-scope="scope">
                 {{scope.row.siteDomain||'--'}}
               </template>
@@ -134,7 +134,7 @@
             <el-table-column
               prop="siteWebPath"
               label="访问地址"
-              min-width="100"
+              min-width="150"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">

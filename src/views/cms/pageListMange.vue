@@ -121,7 +121,7 @@
             <el-table-column
               prop="pageName"
               label="页面名称"
-             min-width="200"
+              min-width="200"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
@@ -131,7 +131,7 @@
             <el-table-column
               prop="pageAliase"
               label="页面别名"
-             min-width="200">
+              min-width="200">
               <template slot-scope="scope">
                 {{scope.row.pageAliase||'--'}}
               </template>
@@ -139,7 +139,7 @@
             <el-table-column
               prop="siteId"
               label="所属站点ID"
-             min-width="200"
+              min-width="200"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
@@ -149,7 +149,7 @@
             <el-table-column
               prop="templateId"
               label="所属模板ID"
-             min-width="200"
+              min-width="200"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
@@ -159,7 +159,7 @@
             <el-table-column
               prop="pageWebPath"
               label="访问地址"
-             min-width="150"
+              min-width="150"
               align="center"
               :show-overflow-tooltip="true"
             >
@@ -170,7 +170,7 @@
             <el-table-column
               prop="pagePhysicalPath"
               label="物理路径"
-             min-width="200"
+              min-width="200"
               :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 {{scope.row.pagePhysicalPath||'--'}}
@@ -179,8 +179,8 @@
             <el-table-column
               prop="pageType"
               label="页面类型"
-             min-width="150"
-            align="cneter">
+              min-width="150"
+              align="cneter">
               <template slot-scope="scope">
                 {{scope.row.pageType | formType}}
               </template>
@@ -188,7 +188,7 @@
             <el-table-column
               prop="htmlFileId"
               label="静态文件ID"
-             min-width="200"
+              min-width="200"
               :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 {{scope.row.htmlFileId||'--'}}
@@ -198,15 +198,15 @@
               prop="pageStatus"
               label="页面状态"
               align="center"
-             min-width="200">
+              min-width="200">
               <template slot-scope="scope">
-                {{scope.row.pageStatus||'--'}}
+                {{scope.row.pageStatus| formatStatus}}
               </template>
             </el-table-column>
             <el-table-column
               prop="dataUrl"
               label="数据URL"
-             min-width="200"
+              min-width="200"
               :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 {{scope.row.dataUrl||'--'}}
@@ -215,7 +215,7 @@
             <el-table-column
               prop="pageCreateTime"
               label="创建时间"
-             min-width="200"
+              min-width="200"
               :show-overflow-tooltip="true"
               :formatter="formatterTime"
             >
@@ -229,7 +229,7 @@
                 <span class="el-icon-chat-line-round tab-btn" @click.stop="pageDetail(scope.row.pageId)">详情</span>
                 <span class="el-icon-edit-outline tab-btn" @click.stop="updatePageBtn(scope.row)">编辑</span>
                 <span class="el-icon-delete tab-btn" @click.stop="deletePageBtn(scope.row.pageId)">删除</span>
-                <span class="el-icon-view tab-btn"  @click.stop="previewPageBtn(scope.row.pageId)">预览</span>
+                <span class="el-icon-view tab-btn" @click.stop="previewPageBtn(scope.row.pageId)">预览</span>
                 <span class="el-icon-position tab-btn" @click.stop="releasePageBtn(scope.row.pageId)">发布</span>
               </template>
             </el-table-column>
@@ -267,7 +267,7 @@
 
 <script>
   import moment from 'moment';
-  import {findPageListApi,deletePageApi,findPageApi,releasePageApi} from '../../service/cms'
+  import {findPageListApi, deletePageApi, findPageApi, releasePageApi} from '../../service/cms'
   import editorPage from './editorPage'
   import pageDetail from './pageDetail'
 
@@ -278,7 +278,7 @@
     },
     data() {
       return {
-        loading:true,
+        loading: true,
         flag: false, //false 增加 true修改
         addPageFlag: {
           visible: false,
@@ -365,12 +365,21 @@
       this.getBreadcrumb();
     },
     filters: {
-      formType(val){
-          if (val === 1) {
-            return '动态';
-          } else {
-            return '静态';
-          }
+      formType(val) {
+        if (val === 1) {
+          return '动态';
+        } else {
+          return '静态';
+        }
+      },
+      formatStatus(val) {
+        if (val === '202001') {
+          return '制作中';
+        } else if (val === '202002') {
+          return '已发布';
+        } else if (val === '202003') {
+          return '已下架';
+        }
       }
     },
     methods: {
@@ -395,7 +404,7 @@
         findPageListApi(this.copyParmas).then(res => {
           console.log("查询条件--》", this.copyParmas);
           console.log("查询分页", res);
-          this.loading=false;
+          this.loading = false;
           this.tablePageData = res.data.list;
           this.totalCount = res.data.total;
         }, err => {
@@ -463,46 +472,46 @@
           this.updatePageFlag.data = val; //传值给子组件
         }
       },
-      deletePageBtn(val){
+      deletePageBtn(val) {
         this.$confirm('确定删除该记录吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deletePageApi(val).then(res=>{
-            if(res.success){
+          deletePageApi(val).then(res => {
+            if (res.success) {
               this.$message.success(res.message);
               this.showListInfo();
-            }else{
+            } else {
               this.$message.error(res.message)
             }
           })
         });
       },
       //页面预览
-      previewPageBtn(val){
-        window.open('http://localhost:31001/cms/page/pagePreview/'+val);
+      previewPageBtn(val) {
+        window.open('http://www.eduonline.com/cms/page/pagePreview/' + val);
       },
       //页面发布
-      releasePageBtn(val){
+      releasePageBtn(val) {
         this.$confirm('确定发布该页面吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          releasePageApi(val).then(res=>{
-          if(res.success){
-            this.$message.success("发布成功！")
-          }else{
-            this.$message.error("发布失败！")
-          }
+          releasePageApi(val).then(res => {
+            if (res.success) {
+              this.$message.success("发布成功！")
+            } else {
+              this.$message.error("发布失败！")
+            }
           })
         })
       },
       //点确定之后回调
       addSuccess(val) {
-        if(val){
-          this.flag=false;
+        if (val) {
+          this.flag = false;
           this.addPageFlag.visible = false;
           this.updatePageFlag.visible = false;
           this.showListInfo();
@@ -510,18 +519,18 @@
       },
       //点关闭之后回调
       closeSuccess() {
-        this.flag=false;
+        this.flag = false;
         this.addPageFlag.visible = false;
         this.updatePageFlag.visible = false;
-        this.seePageDetail.visible=false;
+        this.seePageDetail.visible = false;
       },
       //详情方法 id [String] 记录id
       pageDetail(val) {
-        findPageApi(val).then(res=>{
-          if(res){
-            this.seePageDetail.visible=true;
-            this.seePageDetail.data={...res};
-          }else{
+        findPageApi(val).then(res => {
+          if (res) {
+            this.seePageDetail.visible = true;
+            this.seePageDetail.data = {...res};
+          } else {
             this.$message.error("查看详情失败！")
           }
         })

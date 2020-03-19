@@ -82,7 +82,8 @@
           studymodel: '',
           mt: '',
           st: '',
-          description: ''
+          description: '',
+          status:'202001' //课程状态 制作中
         },
         courseRules: {
           name: [
