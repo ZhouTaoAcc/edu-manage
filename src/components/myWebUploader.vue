@@ -77,7 +77,7 @@
         // 当文件被加入队列以后触发。
         this.uploader.on('fileQueued', (file) => {
           console.log(file);
-          if (file.ext === 'jpg' || 'gif' || 'jpeg' || 'bmp' || 'png') {
+          if (file.ext === 'jpg' ||file.ext === 'gif' ||file.ext === 'jpeg' || file.ext ==='bmp' || file.ext ==='png') {
             alert("请上传文档或视频类型！");
             return false;
           }

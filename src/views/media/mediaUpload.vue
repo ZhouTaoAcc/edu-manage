@@ -1,21 +1,32 @@
 <template>
   <div class="mediaUpload">
-    <br/>
-    操作步骤：<br/>
-    1、点击“选择文件”，选择要上传的文件<br/>
-    2、点击“开始上传”，开始上传文件<br/>
-    3、如需重新上传请重复上边的步骤。<br/><br/>
-    <my-web-uploader
-      ref="uploader"
-      :serverUrl=this.url
-      @fileChange="fileChange"
-      @progress="onProgress"
-      @success="onSuccess"
+    <div class="breadcrumb-operation" v-show="!isChoose">
+      <el-breadcrumb separator="/" class="breadcrumb-inner">
+        <el-breadcrumb-item v-for="(item)  in levelList" :key="item.path" v-if="item.meta.title">
+          <router-link :to="item.redirect||item.path">{{item.meta.title}}</router-link>
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+      <span class="operation">
+         <!--<span class="el-icon-circle-plus" @click=""></span>-->
+      </span>
+    </div>
+    <div class="upload-area">
+      操作步骤：<br/>
+      1、点击“选择文件”，选择要上传的文件<br/>
+      2、点击“开始上传”，开始上传文件<br/>
+      3、如需重新上传请重复上边的步骤。<br/>
+      <my-web-uploader
+        ref="uploader"
+        :serverUrl=this.url
+        @fileChange="fileChange"
+        @progress="onProgress"
+        @success="onSuccess"
 
-    >
-    </my-web-uploader>
+      >
+      </my-web-uploader>
+    </div>
     <div class="file-panel">
-      <h3>文件列表</h3>
+      <div class="panel-title">文件列表</div>
       <div class="file-list">
         <ul class="file-item" :class="`file-${file.id}`" v-for="file in uploadFileData">
           <li class="file-type" :icon="fileCategory(file.ext)"></li>
@@ -23,13 +34,13 @@
           <li class="file-size">{{fileSize(file.size)}}</li>
           <li class="file-status">待上传...</li>
           <li class="file-operate">
-            <a  @click="resume(file)" v-if="!isStop"><i class="iconfont icon-control-play">开始</i></a>
-            <a  @click="stop(file)" v-if="isStop"><i class="iconfont icon-video-pause">暂停</i></a>
-            <a @click="remove(file)"><i class="iconfont icon-close-big">移除</i></a>
+            <a @click="resume(file)" v-if="!isStop"><i class="el-icon-video-play">开始</i></a>
+            <a @click="stop(file)" v-if="isStop"><i class="el-icon-video-pause">暂停</i></a>
+            <a @click="remove(file)"><i class="el-icon-document-delete">移除</i></a>
           </li>
           <li class="progress"></li>
         </ul>
-        <div class="no-file" v-if="!uploadFileData.length"><i class="iconfont icon-empty-file"></i> 暂无待上传文件</div>
+        <div class="no-file" v-if="!uploadFileData.length"><i class="el-icon-document"></i> 暂无待上传文件</div>
       </div>
     </div>
   </div>
@@ -50,8 +61,9 @@
         uploadFileData: [],
         url: "/api/media/upload/uploadchunk",
         percentage: 0,//上传进度
-        isStop:false
+        isStop: false,
         // accept: {accept: 'images'}
+        levelList:[]
       }
     },
     computed: {
@@ -60,6 +72,15 @@
       }
     },
     methods: {
+      //生成面包屑
+      getBreadcrumb() {
+        let matched = this.$route.matched.filter(item => item.name);
+        const first = matched[0];
+        if (first && first.name !== '') {
+          matched = [{path: '/mediaManage', meta: {title: '媒资管理'}}].concat(matched)
+        }
+        this.levelList = matched;
+      },
       fileChange(file) {
         $('.file-status').html("待上传...")
         $(`.file-${file.id} .progress`).css('width', 0 + '%');
@@ -76,11 +97,11 @@
         $(`.file-${file.id} .file-status`).html((percentage * 100).toFixed(2) + '%');
       },
       resume(file) {
-        this.isStop= !this.isStop;
+        this.isStop = !this.isStop;
         this.uploader.upload(file);
       },
       stop(file) {
-        this.isStop= !this.isStop;
+        this.isStop = !this.isStop;
         this.uploader.stop(file);
       },
       remove(file) {
@@ -112,7 +133,7 @@
       }
     },
     mounted() {
-
+      this.getBreadcrumb()
     }
   }
 </script>

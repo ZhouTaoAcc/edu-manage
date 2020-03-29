@@ -1,14 +1,14 @@
 <template>
   <div class="edu-mediaList-contain">
     <!--面包屑行-->
-    <div class="breadcrumb-operation">
+    <div class="breadcrumb-operation" v-show="!isChoose">
       <el-breadcrumb separator="/" class="breadcrumb-inner">
         <el-breadcrumb-item v-for="(item)  in levelList" :key="item.path" v-if="item.meta.title">
           <router-link :to="item.redirect||item.path">{{item.meta.title}}</router-link>
         </el-breadcrumb-item>
       </el-breadcrumb>
       <span class="operation">
-         <span class="el-icon-circle-plus" @click=""> 添加媒质信息</span>
+         <span class="el-icon-circle-plus" @click="uploadFileBtn">上传媒质文件</span>
       </span>
     </div>
     <!--查询部分-->
@@ -34,10 +34,10 @@
           <el-form-item
             label="文件名称："
             class="edu-mediaList-fiu"
-            prop="fileName"
+            prop="fileOriginalName"
           >
             <el-input
-              v-model="searchMediaParams.fileName"
+              v-model="searchMediaParams.fileOriginalName"
               placeholder="请输入文件名称"
               :clearable="true"
             ></el-input>
@@ -47,13 +47,13 @@
             class="edu-mediaList-fiu"
             prop="mediaId"
           >
-          <el-select v-model="searchMediaParams.processStatus" clearable="true">
-            <el-option v-for="item in processStatusList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id">
-            </el-option>
-          </el-select>
+            <el-select v-model="searchMediaParams.processStatus" clearable>
+              <el-option v-for="item in processStatusList"
+                         :key="item.id"
+                         :label="item.name"
+                         :value="item.id">
+              </el-option>
+            </el-select>
           </el-form-item>
         </div>
         <div class="edu-mediaList-fdy">
@@ -117,7 +117,8 @@
             <el-table-column
               prop="fileUrl"
               label="访问URL"
-              min-width="200">
+              min-width="200"
+              :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 {{scope.row.fileUrl||'--'}}
               </template>
@@ -126,7 +127,6 @@
               prop="tag"
               label="标签"
               min-width="100"
-              align="center"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
@@ -140,7 +140,7 @@
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
-                {{scope.row.fileSize||'--'}}
+                {{(scope.row.fileSize/1024/1024).toFixed(2)||'--'}}{{'M'}}
               </template>
             </el-table-column>
             <el-table-column
@@ -165,12 +165,13 @@
             </el-table-column>
             <el-table-column
               label="操作"
-              width="100"
+              width="250"
               align="center"
               fixed="right">
               <template slot-scope="scope">
-                <span class="el-icon-edit-outline tab-btn" @click="process(scope.row.fileId)">开始处理</span>
-                <span class="el-icon-delete tab-btn" @click="choose(scope.row)">选择</span>
+                <el-button class="el-icon-refresh tab-btn" v-if="scope.row.processStatus!=='303002'&&scope.row.processStatus!=='303001'" @click="processBtn(scope.row.fileId)" :loading="processloading">hls处理</el-button>
+                <el-button class="el-icon-delete tab-btn" @click="deleteBtn(scope.row.fileId)"v-if="!isChoose"disabled>删除</el-button>
+                <el-button class="el-icon-document-checked tab-btn" @click="chooseBtn(scope.row)" v-if="isChoose">选择</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -200,22 +201,29 @@
   </div>
 </template>
 <script>
-  import {findMediaListApi, mediaProcessApi} from '../../service/media'
+  import {findMediaListApi, mediaProcessApi,deleteMediaApi} from '../../service/media'
+  import moment from 'moment'
 
   export default {
-    //props: ['ischoose'],
+    props:{
+      isChoose:{
+        type:Boolean,
+        default:false
+      }
+    },
     data() {
       return {
         searchMediaParams: {
-          page: 0,//页码
-          size: 10,//每页显示个数
+          pageNo: 0,//页码
+          pageSize: 10,//每页显示个数
           tag: '',//标签
-          fileName: '',//文件名称
+          fileOriginalName: '',//文件名称
           processStatus: ''//处理状态
         },
         copyParmas: {},
         levelList: [],
         loading: false,
+        processloading:false,
         tableMediaData: [],
         totalCount: 0,
         processStatusList: []
@@ -232,7 +240,7 @@
           } else if (processStatus === '303003') {
             return "处理失败";
           } else if (processStatus === '303004') {
-            return "无需处理";
+            return "手动处理";
           }
         }
       },
@@ -252,7 +260,7 @@
       },
       searchBtn() {
         this.searchMediaParams.pageNo = 0;
-        this.params = {...this.searchMediaParams};
+        this.copyParmas = {...this.searchMediaParams};
         this.showListInfo();
       },
       resetForm() {
@@ -262,33 +270,52 @@
         this.copyParmas = {...this.searchMediaParams};
         this.showListInfo();
       },
-      choose(mediaFile) {
+      chooseBtn(mediaFile) {
         if (mediaFile.processStatus !== '303002' && mediaFile.processStatus !== '303004') {
-          this.$message.error('该文件未处理，不允许选择');
+          this.$message.warning('该文件未处理，不允许选择');
           return;
         }
         if (!mediaFile.fileUrl) {
-          this.$message.error('该文件的访问url为空，不允许选择');
+          this.$message.warning('该文件的访问url为空，不允许选择');
           return;
         }
         //调用父组件的choosemedia方法
-        //this.$emit('choosemedia', mediaFile.fileId, mediaFile.fileOriginalName, mediaFile.fileUrl);
+        this.$emit('choosemedia', mediaFile);
       },
-      process(id) {
+      processBtn(id) {
+        this.processloading=true;
+        this.$message.success('开始处理，请稍后查看处理结果...');
         mediaProcessApi(id).then((res) => {
-          console.log(res);
           if (res.success) {
-            this.$message.success('开始处理，请稍后查看处理结果');
+            this.$message.success('处理成功！');
+            this.showListInfo();
           } else {
             this.$message.error('操作失败，请刷新页面重试');
           }
+          this.processloading=false;
+        })
+      },
+      deleteBtn(id) {
+        deleteMediaApi(id).then((res) => {
+          console.log(res);
+          if (res.success) {
+            this.$message.success('删除成功！');
+            this.showListInfo()
+          } else {
+            this.$message.error('删除失败！');
+          }
+        })
+      },
+      uploadFileBtn(){
+        this.$router.push({
+          path:'/mediaManage/media/upload'
         })
       },
       showListInfo() {
+        console.log(this.copyParmas);
         findMediaListApi(this.copyParmas).then((res) => {
-          console.log(res);
           this.totalCount = res.data.total;
-          this.list = res.data.list
+          this.tableMediaData = res.data.list
         })
       },
       //序号按页码递增 index [Number] 每条数据前的序号
@@ -313,6 +340,7 @@
     mounted() {
       this.getBreadcrumb();
       //默认查询页面
+      this.copyParmas = {...this.searchMediaParams};
       this.showListInfo();
       //初始化处理状态
       this.processStatusList = [

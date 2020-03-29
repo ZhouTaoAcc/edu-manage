@@ -14,21 +14,28 @@
     padding-right: 10px;
     border-right: 2px solid rgba(128, 145, 165, 0.2);
     height: 100%;
-    .operation{
+    .operation {
       float: right;
       color: #909399;
       padding-right: 10px;
-      &:hover{
+      &:hover {
         cursor: pointer;
-        color: rgba(47,144,255,1);
+        color: rgba(47, 144, 255, 1);
       }
     }
   }
   .showContent {
-
-    }
+    width: 40%;
+    padding-left: 2px;
+  }
   .BottomBtn {
     margin-left: 45px !important;
+  }
+  .choosemedia {
+    /deep/ .el-dialog__body {
+      background: rgb(240, 242, 245);
+      padding: 20px 20px !important;
+    }
   }
 
 }

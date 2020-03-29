@@ -8,9 +8,13 @@ let urlPre = sysUrlConfig.ApiUrlPre;//获取前缀
 //1、分页查询媒资列表
 export const findMediaListApi = (params) => {
   let queryParams = QueryString.stringify(params);//将json对象转成key/value字符串
-  return Http.requestQuickGet(urlPre + '/media/fileInfo/list/' + params.pageNo + '/' + params.pageSize + '?' + queryParams);
+  return Http.requestQuickGet(urlPre + '/media/file/list/' + params.pageNo + '/' + params.pageSize + '?' + queryParams);
 };
 //2、媒质处理 编码
 export const mediaProcessApi=(id)=>{
-  return Http.requestQuickGet(urlPre + '/media/fileInfo/process/'+id);
+  return Http.requestQuickGet(urlPre + '/media/file/process/'+id);
+};
+//2、媒质处理 编码
+export const deleteMediaApi=(id)=>{
+  return Http.requestQuickGet(urlPre + '/media/file/delete/'+id);
 };

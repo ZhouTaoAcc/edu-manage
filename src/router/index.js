@@ -89,43 +89,43 @@ export default new Router({
           meta: {title: '课程设置'},
           children: [
             {
-              path: '/courseManage/setting/courseIndex',
+              path: 'courseIndex',
               name: '课程首页',
               component: courseIndex,
               hidden: false
             },
             {
-              path: '/courseManage/setting/baseInfo',
+              path: 'baseInfo',
               name: '基本信息',
               component: courseBaseInfo,
               hidden: false
             },
             {
-              path: '/courseManage/setting/picture',
+              path: 'picture',
               name: '课程图片',
               component: coursePicture,
               hidden: false
             },
             {
-              path: '/courseManage/setting/marketInfo',
+              path: 'marketInfo',
               name: '营销信息',
               component: courseMarketInfo,
               hidden: false
             },
             {
-              path: '/courseManage/setting/plan',
+              path: 'plan',
               name: '课程计划',
               component: coursePlan,
               hidden: false
             },
             {
-              path: '/courseManage/setting/teacher',
+              path: 'teacher',
               name: '教师信息',
               component: courseTeacher,
               hidden: false
             },
             {
-              path: '/courseManage/setting/publish',
+              path: 'publish',
               name: '发布课程',
               component: coursePublish,
               hidden: false

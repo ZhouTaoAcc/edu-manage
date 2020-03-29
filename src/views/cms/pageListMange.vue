@@ -239,7 +239,7 @@
           <div class="edu-pageList-pag-content">
             <el-pagination
               :current-page="searchPageParams.pageNo+1"
-              :page-sizes="[10,20,50,100]"
+              :page-sizes="[2,20,50,100]"
               :page-size="searchPageParams.pageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="totalCount"
@@ -310,7 +310,7 @@
           endDate: '', //结束日期
           pageAliase: '',
           pageNo: 0, //页码
-          pageSize: 10 //每页几条
+          pageSize: 2 //每页几条
         },
         siteList: [
           {

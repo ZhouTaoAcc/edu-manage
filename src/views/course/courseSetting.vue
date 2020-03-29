@@ -7,19 +7,19 @@
       class="el-menu-demo"
       mode="horizontal"
     >
-      <el-menu-item :index="'/courseManage/setting/courseIndex'+'?courseid='+this.courseid">课程首页
+      <el-menu-item :index="'/courseManage/courseSetting/courseIndex?courseid='+this.courseid">课程首页
       </el-menu-item>
-      <el-menu-item :index="'/courseManage/setting/baseInfo'+'?courseid='+this.courseid">基本信息
+      <el-menu-item :index="'/courseManage/courseSetting/baseInfo?courseid='+this.courseid">基本信息
       </el-menu-item>
-      <el-menu-item :index="'/courseManage/setting/picture'+'?courseid='+ this.courseid">课程图片
+      <el-menu-item :index="'/courseManage/courseSetting/picture?courseid='+ this.courseid">课程图片
       </el-menu-item>
-      <el-menu-item :index=" '/courseManage/setting/marketInfo'+'?courseid='+  this.courseid ">课程营销
+      <el-menu-item :index=" '/courseManage/courseSetting/marketInfo?courseid='+this.courseid ">课程营销
       </el-menu-item>
-      <el-menu-item :index=" '/courseManage/setting/plan'+'?courseid='+ this.courseid ">课程计划
+      <el-menu-item :index=" '/courseManage/courseSetting/plan?courseid='+ this.courseid ">课程计划
       </el-menu-item>
-      <el-menu-item :index=" '/courseManage/setting/teacher'+'?courseid='+this.courseid ">教师信息
+      <el-menu-item :index=" '/courseManage/courseSetting/teacher?courseid='+this.courseid ">教师信息
       </el-menu-item>
-      <el-menu-item :index=" '/courseManage/setting/publish'+'?courseid='+ this.courseid ">发布课程
+      <el-menu-item :index=" '/courseManage/courseSetting/publish?courseid='+ this.courseid ">发布课程
       </el-menu-item>
     </el-menu>
     <!--components下面的组件都在此处渲染-->
@@ -40,10 +40,10 @@
       this.courseid = this.$route.query.courseid;
       //跳转到课程基本信息
       this.$router.push({
-        path: '/courseManage/setting/baseInfo',
+        path: '/courseManage/courseSetting/baseInfo',
         query: {courseid: this.courseid}
       });
-      this.$router.path = '/courseManage/setting/baseInfo'+'?courseid='+this.courseid;//默认选中
+      this.$router.path = '/courseManage/courseSetting/baseInfo?courseid='+this.courseid;//默认选中
     }
   }
 </script>

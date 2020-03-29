@@ -63,16 +63,19 @@ export const addCoursePlanApi = (params) => {
 export const deleteCoursePlanById = (id) => {
   return Http.requestPost(urlPre + '/course/plan/delete/' + id);
 };
-//15。保存媒资信息
+//15。保存课程计划的媒资信息
 export const addMediaApi = (params) => {
-  return Http.requestPost(urlPre+'/course/media/add',params);
+  return Http.requestPost(urlPre+'/course/planmedia/add',params);
 };
-
-//16 课程预览
+//16。根据课程计划id查询课程计划绑定的媒资
+export const findPlanMediaApi = (id) => {
+  return Http.requestQuickGet(urlPre+'/course/planmedia/findById/'+id);
+};
+//17 课程预览
 export const coursePreviewApi = (id) => {
   return Http.requestQuickGet(urlPre+'/course/info/preView/'+id);
 };
-//17。课程发布
+//18。课程发布
 export const coursePublishApi = (id) => {
   return Http.requestQuickGet(urlPre+'/course/info/publish/'+id);
 };
