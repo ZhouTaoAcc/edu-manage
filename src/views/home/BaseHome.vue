@@ -17,9 +17,10 @@
           <el-menu :default-active="$router.path"
                    router
                    unique-opened
-                   background-color="#545c64"
-                   text-color="#fff"
-                   active-text-color="#ffd04b"
+                   collapse-transition
+                   background-color="#263238"
+                   text-color="#8a979e"
+                   active-text-color="#e8eaec"
                    class="el-menu-vertical-demo"
                    @open="handleOpen"
                    @close="handleClose"
@@ -49,9 +50,9 @@
             </div>
           </el-main>
           <!--尾部-->
-          <el-footer>
-            <p-foot></p-foot>
-          </el-footer>
+          <!--<el-footer>-->
+            <!--&lt;!&ndash;<p-foot></p-foot>&ndash;&gt;-->
+          <!--</el-footer>-->
         </el-container>
       </el-container>
     </el-container>
@@ -86,9 +87,6 @@
       }
     },
     methods: {
-      onSubmit() {
-        console.log('submit!');
-      },
       handleOpen() {
         console.log('handleopen');
       },
@@ -98,9 +96,6 @@
       //折叠导航栏
       collapse() {
         this.isCollapse = !this.isCollapse;
-      },
-      showMenu(i, status) {
-        this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-' + i)[0].style.display = status ? 'block' : 'none';
       }
     },
     created() {

@@ -13,13 +13,13 @@
     background: #fff;
     height: 100%;
     .header {
-      height: 60px;
-      line-height: 60px;
+      height: 50px;
+      line-height: 50px;
       background: steelblue;
       color: #fff;
     }
     .menu-collapsed { //折叠状态
-      background: #545c64;
+      background: #263238;
       .CollapseBtn span {
         margin-left: 40px;
         & > img {
@@ -31,7 +31,7 @@
       }
     }
     .menu-expanded { //展开状态
-      background: #545c64;
+      background: #263238;
       .CollapseBtn span {
         margin-left: 205px;
         & > img {
@@ -50,15 +50,14 @@
       width: 240px;
       min-height: auto;
     }
+    .el-header{
+      height: 50px!important;
+    }
     /*下面设置内容区域（右中）最外层样式 子路由锚点区域*/
     .el-main {
       background: rgb(240, 242, 245);
-      max-height:600px; //目的是只有内容区域达到滚动效果 其他边栏固定不动
+      max-height:680px; //目的是只有内容区域达到滚动效果 其他边栏固定不动
       padding: 0 20px 10px 20px;
-    }
-    /*下面设置尾部区域（下）最外层样式*/
-    .el-footer {
-      background: rgb(240, 242, 245);
     }
   }
 }

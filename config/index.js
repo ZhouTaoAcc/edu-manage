@@ -12,36 +12,39 @@ module.exports = {
     assetsPublicPath: '/',
     //vue-cli提供的解决跨域问题的方法 依赖于node.js 用服务端代理解决浏览器跨域
     proxyTable: {
-      '/api/cms': {
-        target: 'http://localhost:31001',  //cms页面管理服务
-        pathRewrite: {
-          '^/api': ''//实际请求去掉/api
-        }
-      },
-      '/api/system': {
-        target: 'http://localhost:31001',  //系统管理服务
-        pathRewrite: {
-          '^/api': ''//实际请求去掉/api
-        }
-      },
-      '/api/course': {
-        target: 'http://localhost:31002', //课程管理服务
-        pathRewrite: {
-          '^/api': ''//实际请求去掉/api
-        }
-      },
-      '/api/fileServer': {
-        target: 'http://localhost:51000', //文件服务
-        pathRewrite: {
-          '^/api': ''//实际请求去掉/api
-        }
-      },
-      '/api/media': {//媒资上传服务
-        target: 'http://localhost:31004', //文件服务
-        pathRewrite: {
-          '^/api': ''//实际请求去掉/api
-        }
-      }
+      // '/api/cms': {
+      //   target: 'http://localhost:31001',  //cms页面管理服务
+      //   pathRewrite: {
+      //     '^/api': ''//实际请求去掉/api
+      //   }
+      // },
+      // '/api/system': {
+      //   target: 'http://localhost:31001',  //系统管理服务
+      //   pathRewrite: {
+      //     '^/api': ''//实际请求去掉/api
+      //   }
+      // },
+      // '/api/course': {
+      //   target: 'http://localhost:31002', //课程管理服务
+      //   pathRewrite: {
+      //     '^/api': ''//实际请求去掉/api
+      //   }
+      // },
+      // '/api/fileServer': {
+      //   target: 'http://localhost:51000', //文件服务
+      //   pathRewrite: {
+      //     '^/api': ''//实际请求去掉/api
+      //   }
+      // },
+      // '/api/media': {//媒资上传服务
+      //   target: 'http://localhost:31004', //文件服务
+      //   pathRewrite: {
+      //     '^/api': ''//实际请求去掉/api
+      //   }
+      // },
+      // '/auth': {//认证服务
+      //   target: 'http://localhost:41001',
+      // }
     },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

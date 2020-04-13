@@ -1,28 +1,54 @@
 require('es6-promise').polyfill();
 import axios from 'axios'
 import Utils from '../../../utils/utils.js'
+import router from '../../router/index'
+import {
+  Message
+} from 'element-ui'
+
 axios.defaults.withCredentials = true; //跨域
 axios.defaults.timeout = 100000;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www=form-urlencoded';
-if(Utils.getJwt()){
-  axios.defaults.headers['Authorization'] = 'Bearer '+Utils.getJwt()
-}
-//axios.defaults.headers['Authorization'] = ''
 // 请求之前拦截
-/*axios.interceptors.request.use(config => {
+axios.interceptors.request.use(config => {
   // 判断token
-  //if (localStorage.token) {
-    config.headers.Authorization = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjEwODA4ODYsInVzZXJfbmFtZSI6IjEyMyIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iLCJST0xFX1VTRVIiXSwianRpIjoiYTNiM2RiYjgtODJkYS00YWI2LWIwZjEtMWMyZDI5ZjM3MjExIiwiY2xpZW50X2lkIjoibWFuYWdlciIsInNjb3BlIjpbIm1hbmFnZXIiXX0.YivH7foaYfSJs9nPBR40TbJ7T0sGXBGaZV2g8Ivktiatdv0Sjkl4PbS3tsjSBtbyqLekYDLoWSojiDLyvgMy5qskeRLefVk4FYpEMzpxfb5JtaxoIRH0o-Re1MC2quq-J7kxRKAL1DUEmr-_GEEmB8zswYJNwYn3vZK0FMQlbsIty4LCfgIwXfH9XnPcUhojUUIBRUDT2W3s8j-qZQ-iKk1y2kesrXloiOtPEL5CljmlOyZ3GED_HNude5b41TqCQyv2VS1baE9DEPo-P0Hb33rSCMILk3rZg-hO7zuDMGfbGWKMQRgY6Fb2uUtqokYa5aLtXyEwW67FKAi2mK2cPA'
-  //}
+  if (Utils.getJwt()) {
+    config.headers.Authorization = 'Bearer ' + Utils.getJwt();
+  }
   return config
-},error =>{
-  alert("参数错误", 'fail')
+}, error => {
   return Promise.reject(error)
-})*/
+});
+// 全局拦截响应
+axios.interceptors.response.use((response) => {
+  if(response.data.code===10001){ //网关校验之后响应的数据
+    Message.error('身份过期，重新登陆');
+    router.replace({
+      path: '/login'
+    })
+  }
+  return response
+}, error => {
+  if (error.response) {
+    if (error.response.status === 401) {
+      // 这种情况一般调到登录页
+    } else if (error.response.status === 403) {
+      // 提示无权限等
+      Message.error('没有权限，拒绝访问');
+      router.replace({
+        path: '/error'
+      })
+    } else {
+      // 其他错误处理
+    }
+  }
+  return Promise.reject(error)
+});
+
 
 export default {
   //get请求
-  requestGet (url, params = {}) {
+  requestGet(url, params = {}) {
     return new Promise((resolve, reject) => {
       axios.get(url, params).then(res => {
         resolve(res.data)
@@ -32,7 +58,7 @@ export default {
     })
   },
   //get请求不带参数
-  requestQuickGet (url) {
+  requestQuickGet(url) {
     return new Promise((resolve, reject) => {
       axios.get(url).then(res => {
         resolve(res.data)
@@ -42,7 +68,7 @@ export default {
     })
   },
   //post请求
-  requestPost (url, params = {}) {
+  requestPost(url, params = {}) {
     return new Promise((resolve, reject) => {
       axios.post(url, params).then(res => {
         resolve(res.data)
@@ -52,7 +78,7 @@ export default {
     })
   },
   //post请求
-  requestPostForm (url, params = {}) {
+  requestPostForm(url, params = {}) {
     return new Promise((resolve, reject) => {
       axios.post(url, params, {
         headers: {
@@ -66,7 +92,7 @@ export default {
     })
   },
   //put请求
-  requestPut (url, params = {}) {
+  requestPut(url, params = {}) {
     return new Promise((resolve, reject) => {
       axios.put(url, params).then(res => {
         resolve(res.data)
@@ -76,7 +102,7 @@ export default {
     })
   },
   //delete请求
-  requestDelete (url, params = {}) {
+  requestDelete(url, params = {}) {
     return new Promise((resolve, reject) => {
       axios.delete(url, params).then(res => {
         resolve(res.data)

@@ -23,8 +23,9 @@ import coursePublish from '../views/course/components/coursePublish'//课程发�
 //媒质管理模块
 import mediaListManage from '../views/media/mediaListManage'
 import mediaUpload from '../views/media/mediaUpload'
-//import mediaUpload from '../components/myWebUploader'
-
+//登录页面
+import loginIndex from '../views/login/loginIndex'
+import error from '../components/error'
 Vue.use(Router);
 
 export default new Router({
@@ -32,8 +33,27 @@ export default new Router({
     {
       path: '/',
       name: '',
-      redirect: '/login',//路由重定向
+      redirect:'/login',
       hidden: true
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: loginIndex,
+      hidden: true
+    },
+    {
+      path: '/',
+      name: '',
+      component: Home,
+      hidden: true,
+      children: [
+        {
+          path: 'error',
+          name: 'error',
+          component: error,
+          hidden: true
+        }]
     },
     {
       path: '/cms',
@@ -41,7 +61,6 @@ export default new Router({
       icon: 'el-icon-document',//图标
       component: Home,
       hidden: false,//菜单是否隐藏
-      meta: {requiresAuth: true},
       children: [
         {
           path: 'page/list', /*访问路径 /cms/page/list */
@@ -72,7 +91,6 @@ export default new Router({
       icon: 'el-icon-notebook-1',
       component: Home,
       hidden: false,
-      meta: {requiresAuth: true},
       children: [
         {
           path: 'myCourse/list',
@@ -147,7 +165,6 @@ export default new Router({
       icon: 'el-icon-video-camera',
       component: Home,
       hidden: false,
-      meta: {requiresAuth: true},
       children: [
         {
           path: 'myMedia/list',
@@ -171,7 +188,6 @@ export default new Router({
       icon: 'el-icon-setting',
       component: Home,
       hidden: false,
-      meta: {requiresAuth: true},
       children: [
         {
           path: 'dictionary/list',

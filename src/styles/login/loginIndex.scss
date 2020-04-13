@@ -1,0 +1,54 @@
+.loginIndex {
+  background: rgb(240, 242, 245);
+  height: 100%;
+  width: 100%;
+  margin-left: -10px;
+  margin-top: -10px;
+  position: fixed;
+  .login-title {
+    padding: 20px;
+    font-size: 40px;
+    height: 50px;
+    text-align: center;
+    text-shadow:0 0 10px black;
+    color: #fff;
+  }
+  .login-box {
+    position: relative;
+    height: calc(100% - 250px);
+    width: 100%;
+    background: url("../../assets/login1.jpg") no-repeat 0px 0px; //左边距 上边距
+    background-size: 100% 100%; //图片大小
+    display: flex;
+    justify-content:center;//div内的div 水平居中
+    .login-form {
+      background: transparent;
+      margin: auto 0px;
+      .el-form-item {
+        width: 320px;
+        .el-input {
+          opacity: 0.7;
+        }
+        /deep/ .el-form-item__error {
+          color: #F56C6C;
+          font-size: 14px;
+          line-height: 1;
+          padding-top: 4px;
+          position: absolute;
+          top: 100%;
+          left: 0;
+        }
+        .el-button {
+          width: 100%;
+          opacity: 0.7;
+        }
+      }
+
+    }
+  }
+  .login-footer {
+    width: 100%;
+    height: 100px;
+    text-align: center;
+  }
+}
