@@ -23,21 +23,18 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use((response) => {
   if(response.data.code===10001){ //网关校验之后响应的数据
     Message.error('身份过期，重新登陆');
-    router.replace({
-      path: '/login'
-    })
+    router.replace({path: '/login'})
   }
   return response
 }, error => {
   if (error.response) {
     if (error.response.status === 401) {
-      // 这种情况一般调到登录页
+      // 这种情况一般没有登录
+      router.replace({path: '/login'})
     } else if (error.response.status === 403) {
       // 提示无权限等
-      Message.error('没有权限，拒绝访问');
-      router.replace({
-        path: '/error'
-      })
+      Message.error('权限不足，拒绝访问');
+      router.replace({path: '/error'})
     } else {
       // 其他错误处理
     }

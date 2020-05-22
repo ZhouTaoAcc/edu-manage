@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item label="课程图片">
         <el-upload
-          action="/api/fileServer/upload"
+          action="/fileServer/upload"
           list-type="picture-card"
           :file-list="fileList"
           :data="uploadData"
@@ -73,7 +73,7 @@
       },
       //上传成功回调 返回后台响应结果
       handleSuccess(response,file,fileList) {
-        console.log('handleSuccess',response)
+        console.log('handleSuccess',response);
         if(response.success){
           this.$message.success("上传成功!");
           this.fileId= response.data.fileId;

@@ -58,7 +58,7 @@
 <script>
   import {findDictionaryApi} from '../../service/system'
   import {findCategoryTreeApi, addCourseBaseApi} from '../../service/course'
-
+import Utils from '../../../utils/utils'
   export default {
     name: "courseBaseAdd",
     data() {
@@ -83,7 +83,8 @@
           mt: '',
           st: '',
           description: '',
-          status:'202001' //课程状态 制作中
+          status:'202001', //课程状态 制作中
+          companyId:'',
         },
         courseRules: {
           name: [
@@ -159,7 +160,10 @@
         console.log('学习模式字典', res);
         this.studymodelList = res.children;
       });
-
+     let activeUser= Utils.getActiveUser();
+     if(activeUser.companyId){
+       this.courseAddForm.companyId= activeUser.companyId
+     }
     }
   }
 </script>

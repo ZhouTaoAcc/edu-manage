@@ -1,6 +1,6 @@
 <template>
   <div class="loginIndex">
-    <div class="login-title">后台管理系统</div>
+    <div class="login-title"><img src="/static/images/sys_logo.png" width="250px" height="50px" alt="">后台管理系统</div>
     <div class="login-box">
       <el-form :model="loginForm"
                :rules="loginRules" ref="loginForm" class="login-form">
@@ -70,7 +70,7 @@
                     if (Utils.checkLogin()) {//检验用户是否有登录后台系统的权限
                       this.$message.success("登录成功！");
                       this.$router.push({
-                        path: '/cms/page/list'
+                        path: '/welcome'
                       })
                     } else {
                       logoutApi().then(res => {
@@ -81,7 +81,7 @@
                     }
                   }
                   else {
-                    this.$message.error(res.message)
+                    this.$message.error("网络异常,请重试！")
                   }
                 })
             }

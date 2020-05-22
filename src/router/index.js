@@ -26,6 +26,7 @@ import mediaUpload from '../views/media/mediaUpload'
 //登录页面
 import loginIndex from '../views/login/loginIndex'
 import error from '../components/error'
+import welcome from '../components/welcome'
 Vue.use(Router);
 
 export default new Router({
@@ -37,7 +38,7 @@ export default new Router({
       hidden: true
     },
     {
-      path: '/login',
+      path: '/login',//登录页
       name: 'login',
       component: loginIndex,
       hidden: true
@@ -49,11 +50,18 @@ export default new Router({
       hidden: true,
       children: [
         {
-          path: 'error',
+          path: 'error', //错误页面
           name: 'error',
           component: error,
           hidden: true
-        }]
+        },
+        {
+          path: 'welcome',//系统首页
+          name: 'welcome',
+          component: welcome,
+          hidden: true
+        }
+      ]
     },
     {
       path: '/cms',

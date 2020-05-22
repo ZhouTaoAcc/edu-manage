@@ -11,3 +11,8 @@ export const logoutApi = () => {
   return Http.requestPost('/auth/userlogout')
 };
 
+//查询学学校的信息
+export const getCompanyApi = (id) => {
+  return Http.requestQuickGet("/ucenter/company/get/" + id);
+};
+

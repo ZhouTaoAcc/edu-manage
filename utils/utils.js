@@ -30,6 +30,7 @@ export default {
       activeUser.username = jwtDecode1.user_name || '';
       activeUser.userpic = jwtDecode1.userpic || '';
       activeUser.userid = jwtDecode1.id || '';
+      activeUser.companyId = jwtDecode1.companyId || '';
       activeUser.authorities = jwtDecode1.authorities || '';
       activeUser.jwt = val;
     }

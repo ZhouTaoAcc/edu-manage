@@ -101,8 +101,11 @@
       /deep/ .el-card {
         margin: 10px;
         height: 250px;
-        &:hover{
-         background:#dddddd;
+        &:hover {
+          cursor: pointer;
+          transform: translateY(-10px);
+          transition: all 0.5s;
+          border-bottom: 2px solid #00a4ff;
         }
       }
       .time {
@@ -125,6 +128,11 @@
         width: 100%;
         height: 100px;
         display: block;
+        &:hover{
+          transform: scale(1.1);
+          transition: all 0.5s;
+        }
+
       }
 
       .clearfix:before,
@@ -132,18 +140,18 @@
         display: table;
         content: "";
       }
-      .status{
+      .status {
         border-radius: 4px;
         color: #fff;
         font-size: 14px;
         float: right;
-        &.doing{
-          background:#99FF00;
+        &.doing {
+          background: #99FF00;
         }
-        &.pub{
+        &.pub {
           background: #FFCC00;
         }
-        &.down{
+        &.down {
           background: #606266;
         }
       }

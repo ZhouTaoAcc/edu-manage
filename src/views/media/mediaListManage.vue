@@ -170,7 +170,7 @@
               fixed="right">
               <template slot-scope="scope">
                 <el-button class="el-icon-refresh tab-btn" v-if="scope.row.processStatus!=='303002'&&scope.row.processStatus!=='303001'" @click="processBtn(scope.row.fileId)" :loading="processloading">hls处理</el-button>
-                <el-button class="el-icon-delete tab-btn" @click="deleteBtn(scope.row.fileId)"v-if="!isChoose"disabled>删除</el-button>
+                <el-button class="el-icon-delete tab-btn" @click="deleteBtn(scope.row.fileId)" v-if="!isChoose" >删除</el-button>
                 <el-button class="el-icon-document-checked tab-btn" @click="chooseBtn(scope.row)" v-if="isChoose">选择</el-button>
               </template>
             </el-table-column>

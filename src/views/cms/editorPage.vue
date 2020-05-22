@@ -152,7 +152,7 @@
             templateName: '轮播图'
           },
           {
-            templateId: '5e6348001ddb9b2cc0bf6256',
+            templateId: '5ec0d696c868a11a50370b80',
             templateName: '课程详情'
           }
         ],

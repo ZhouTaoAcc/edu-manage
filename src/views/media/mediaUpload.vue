@@ -1,6 +1,6 @@
 <template>
   <div class="mediaUpload">
-    <div class="breadcrumb-operation" v-show="!isChoose">
+    <div class="breadcrumb-operation">
       <el-breadcrumb separator="/" class="breadcrumb-inner">
         <el-breadcrumb-item v-for="(item)  in levelList" :key="item.path" v-if="item.meta.title">
           <router-link :to="item.redirect||item.path">{{item.meta.title}}</router-link>
@@ -59,7 +59,7 @@
       return {
         uploadFile: {},//上传的文件
         uploadFileData: [],
-        url: "/api/media/upload/uploadchunk",
+        url: "/media/upload/uploadchunk",
         percentage: 0,//上传进度
         isStop: false,
         // accept: {accept: 'images'}

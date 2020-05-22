@@ -11,6 +11,7 @@
 </template>
 
 <script>
+  import Utils from '../../utils/utils'
   export default {
     name: "myWebUploader",
     props: {//接受父组件传来的参数
@@ -146,7 +147,7 @@
                 $.ajax(
                   {
                     type: "POST",
-                    url: "/api/media/upload/register",
+                    url: "/media/upload/register",
                     data: params,
                     dataType: "json",
                     success(res) {
@@ -176,7 +177,7 @@
             $.ajax(
               {
                 type: "POST",
-                url: "/api/media/upload/checkchunk",
+                url: "/media/upload/checkchunk",
                 data: params,
                 dataType: "json",
                 success(res) {
@@ -207,7 +208,7 @@
             $.ajax(
               {
                 type: "POST",
-                url: "/api/media/upload/mergechunks",
+                url: "/media/upload/mergechunks",
                 data: params,
                 dataType: "json",
                 success(res) {

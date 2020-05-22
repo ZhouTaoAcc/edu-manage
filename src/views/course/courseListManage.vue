@@ -28,17 +28,17 @@
               :clearable="true"
             ></el-input>
           </el-form-item>
-          <el-form-item
-            label="所属公司："
-            class="edu-courseManageList-fiu"
-            prop="companyId"
-          >
-            <el-input
-              v-model="searchCourseParams.companyId"
-              placeholder="请输入所属公司"
-              :clearable="true"
-            ></el-input>
-          </el-form-item>
+          <!--<el-form-item-->
+            <!--label="所属公司："-->
+            <!--class="edu-courseManageList-fiu"-->
+            <!--prop="companyId"-->
+          <!--&gt;-->
+            <!--<el-input-->
+              <!--v-model="searchCourseParams.companyId"-->
+              <!--placeholder="请输入所属公司"-->
+              <!--:clearable="true"-->
+            <!--&gt;</el-input>-->
+          <!--</el-form-item>-->
           <el-form-item
             label="课程状态："
             class="edu-courseManageList-fiu"
@@ -126,11 +126,13 @@
 <script>
   import {findCourseListApi} from '../../service/course'
   import sysUrlConfig from '../../../static/config/baseUrl'
+  import Utils from '../../../utils/utils'
 
   export default {
     name: "courseManageList",
     data() {
       return {
+        activeUser:{},
         loading: true,
         searchCourseParams: {
           name: '',
@@ -158,8 +160,14 @@
       }
     },
     mounted() {
-      this.copyParmas = {...this.searchCourseParams};
-      this.showListInfo();
+      this.activeUser = Utils.getActiveUser();
+      if ( this.activeUser.companyId) {
+        this.searchCourseParams.companyId = this.activeUser.companyId;
+        this.copyParmas = {...this.searchCourseParams};
+        this.showListInfo();
+      }else {
+        this.$message.warning("当前用户没有企业认证！");
+      }
       this.getBreadcrumb();
     },
     filters: {
@@ -226,12 +234,12 @@
         for (let k in this.searchCourseParams) {
           this.searchCourseParams[k] = '';
         }
+        this.searchCourseParams.companyId = this.activeUser.companyId;
         this.searchCourseParams.pageNo = 0;
         this.searchCourseParams.pageSize = 11;
         this.copyParmas = {...this.searchCourseParams};
         this.showListInfo();
       }
-
     }
   }
 </script>

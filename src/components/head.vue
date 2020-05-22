@@ -1,10 +1,13 @@
 <template>
   <div>
     <el-col :span="24" class="header">
-      <el-col :span="14">
-      <div class="sys-name">后台管理系统</div>
-    </el-col>
-      <el-col :span="10" class="userinfo" v-if="this.logined">
+      <el-col :span="10">
+        <div class="sys-name">后台管理系统</div>
+      </el-col>
+      <el-col :span="14" class="userinfo" style="text-align: right" v-if="this.logined">
+        <span class="user-com" style="margin-right: 30px;font-size: 20px;">
+          {{companyInfo.name}}
+        </span>
         <div class="sys-user">
           <el-dropdown @command="handleCommand">
       <span class="el-dropdown-link">
@@ -13,7 +16,7 @@
       </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item icon="el-icon-user" command="portal">门户首页</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-user" command="personal">个人中心</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-user" command="personal">个人设置</el-dropdown-item>
               <el-dropdown-item icon="el-icon-close" command="logout">安全退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -24,7 +27,7 @@
 </template>
 <script type="text/javascript">
   import Utils from '../../utils/utils'
-  import {logoutApi} from '../service/login'
+  import {logoutApi, getCompanyApi} from '../service/login'
 
   export default {
     data() {
@@ -39,6 +42,7 @@
         },
         logined: true,
         collapsed: false,
+        companyInfo: []
       }
     },
     methods: {
@@ -49,8 +53,8 @@
         if (command === 'personal') {
           this.personal();
         }
-        if(command==='portal'){
-          window.location.href='http://www.eduonline.com'
+        if (command === 'portal') {
+          window.location.href = 'http://www.eduonline.com'
         }
       },
       personal() {
@@ -71,11 +75,17 @@
           })
         });
       },
+      getCompany(id) {
+        getCompanyApi(id).then(res => {
+          this.companyInfo = res;
+        })
+      },
       refresh_user: function () {
         let activeUser = Utils.getActiveUser();//获取当前登陆人
         if (activeUser) {
           this.logined = true;
           this.user = {...activeUser};
+          this.getCompany(this.user.companyId)
         }
       }
     },
@@ -95,9 +105,11 @@
       font-size: 20px !important;
     }
   }
-  .sys-user{
+
+  .sys-user {
     float: right;
   }
+
   .el-dropdown-link {
     font-size: 16px;
     cursor: pointer;
@@ -109,9 +121,11 @@
       vertical-align: middle
     }
   }
+
   .el-icon-arrow-down {
     font-size: 12px;
   }
+
   .demonstration {
     display: block;
     color: #8492a6;
